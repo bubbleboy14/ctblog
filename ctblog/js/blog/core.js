@@ -1,0 +1,1 @@
+CT.require("blog.core.util");
