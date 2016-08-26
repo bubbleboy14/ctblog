@@ -4,7 +4,8 @@ copies = {
 }
 syms = {
 	"js": ["blog"],
-	"css": ["blog.css"]
+	"css": ["blog.css"],
+	"html": ["blog"]
 }
 model = {
 	"ctblog.model": ["*"]
