@@ -7,13 +7,21 @@ blog.core.db = {
 			}
 		});
 	},
-	posts: function(cb, myposts) {
-		CT.db.get("post", cb, null, null, null, blog.core.util._user && {
-			user: {
-				value: blog.core.util._user.key,
+	posts: function(cb, live, myposts) {
+		var filters = {};
+		if (live) {
+			filters.live = {
+				value: true,
 				comparator: "=="
 			}
-		});
+		}
+		if (myposts) {
+			filters.user = {
+				value: blog.core.util._user.key,
+				comparator: "=="
+			};
+		}
+		CT.db.get("post", cb, null, null, null, filters);
 	}
 };
 CT.db.setLimit(1000);
