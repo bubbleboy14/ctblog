@@ -41,5 +41,5 @@ CT.onload(function() {
 	blog.core.db.posts(function(posts) {
 		CT.panel.triggerList(posts, viewPost, tlist);
 		CT.dom.setContent("ctmain", [ tlist, content ]);
-	}, true);
+	}, false, true);
 });

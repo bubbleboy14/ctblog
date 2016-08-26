@@ -16,5 +16,5 @@ CT.onload(function() {
 				CT.dom.node(p.body, "div", "padded")
 			], "div", "bordered padded round");
 		}));
-	});
+	}, true);
 });
