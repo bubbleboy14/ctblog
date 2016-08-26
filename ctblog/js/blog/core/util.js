@@ -1,4 +1,4 @@
-core.util = {
+blog.core.util = {
 	post: function() {
 		(new CT.dom.Modal({
 			content: [
@@ -8,3 +8,4 @@ core.util = {
 		})).show()
 	}
 };
+blog.core.util._user = user.core.get();
