@@ -22,15 +22,18 @@ CT.onload(function() {
 								classname: "w1",
 								blurs: core.config.ctblog.blog.blurs.comment,
 								cb: function(val) {
-									var pdata = {
-										action: "comment",
-										user: blog.core.util._user.key,
-										post: p.key,
-										body: val
-									};
-									val && CT.net.post("/_blog", pdata, null, function() {
-										cnode.firstChild.firstChild.nextSibling.appendChild(blog.core.util.comment(pdata));
-									});
+									if (val) {
+										var pdata = {
+											action: "comment",
+											user: blog.core.util._user.key,
+											post: p.key,
+											body: val
+										};
+										CT.net.post("/_blog", pdata, null, function() {
+											cnode.firstChild.firstChild.nextSibling.appendChild(blog.core.util.comment(pdata));
+										});
+										return "clear";
+									}
 								}
 							})
 						]);
