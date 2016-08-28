@@ -2,8 +2,6 @@ CT.require("CT.all");
 CT.require("core");
 CT.require("user.core");
 CT.require("blog.core");
-if (!blog.core.util._user)
-	location = "/";
 
 CT.onload(function() {
 	CT.initCore();
