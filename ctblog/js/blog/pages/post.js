@@ -11,7 +11,7 @@ CT.onload(function() {
 		editPost = function(p) {
 			if (p.label == blog.core.util._newPost)
 				return CT.db.withSchema(function(schema) {
-					editPost(CT.merge(schema.post));
+					editPost(CT.db.edit.getDefaults("post"));
 				});
 			var title = CT.dom.smartField({ blurs: blurs.title, value: p.title, classname: "w1" }),
 				blurb = CT.dom.smartField({ blurs: blurs.blurb, value: p.blurb, classname: "w1 h100p", isTA: true }),
