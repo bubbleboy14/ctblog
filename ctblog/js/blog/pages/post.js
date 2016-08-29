@@ -14,10 +14,11 @@ CT.onload(function() {
 					editPost(CT.db.edit.getDefaults("post"));
 				});
 			var title = CT.dom.smartField({ blurs: blurs.title, value: p.title, classname: "w1" }),
+				img = CT.db.edit.img({ data: p }),
 				blurb = CT.dom.smartField({ blurs: blurs.blurb, value: p.blurb, classname: "w1 h100p", isTA: true }),
 				body = CT.dom.smartField({ blurs: blurs.body, value: p.body, classname: "w1 h400p", isTA: true }),
 				live = CT.dom.checkboxAndLabel("Go Live", p.live, null, "pointer", "right");
-			CT.dom.setContent(content, CT.dom.node([title, blurb, body, live, CT.dom.button("Submit", function() {
+			CT.dom.setContent(content, CT.dom.node([title, img, blurb, body, live, CT.dom.button("Submit", function() {
 				if (!title.value || !blurb.value || !body.value)
 					return alert("please complete all fields");
 				var pdata = {
