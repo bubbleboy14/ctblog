@@ -7,11 +7,18 @@ CT.onload(function() {
 	CT.initCore();
 	blog.core.db.posts(function(posts) {
 		CT.dom.setContent("ctmain", posts.map(function(p) {
-			var cnode = CT.dom.node();
+			var cnode = CT.dom.node(), unode = CT.dom.node(null, "div", "right");
 			blog.core.db.comments(function(comments) {
-				CT.db.multi(comments.map(function(c) {
+				var required = comments.map(function(c) {
 					return c.user;
-				}), function() {
+				});
+				required.push(p.user);
+				CT.db.multi(required, function() {
+					var poster = CT.data.get(p.user);
+					CT.dom.setContent(unode, CT.dom.link([
+						CT.dom.img(poster.img, "w100 block"),
+						CT.dom.node(poster.firstName + " " + poster.lastName, "div", "small centered")
+					], null, "/user/profile.html#" + p.key, "round block hoverglow"));
 					var content = [
 						CT.dom.node("Comments", "div", "bigger bold"),
 						comments.map(blog.core.util.comment)
@@ -41,6 +48,7 @@ CT.onload(function() {
 				});
 			}, p);
 			return CT.dom.node([
+				unode,
 				CT.dom.node(p.title, "div", "biggest bold padded"),
 				CT.dom.img(p.img, "w1"),
 				CT.dom.node(p.blurb, "div", "gray italic blockquote"),
