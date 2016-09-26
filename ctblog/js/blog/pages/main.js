@@ -8,7 +8,8 @@ CT.onload(function() {
 	CT.dom.setContent("ctmain", CT.dom.node(core.config.ctblog.index.blurb, "div", "blockquote"));
 	if (core.config.ctblog.index.slider.length) {
 		var snode = CT.dom.node(null, null, "abs bottom0 w1 h200p");
-		CT.dom.addContent("ctmain", snode);
+		CT.dom.addContent(document.body, snode);
+		document.body.classList.add("footered");
 		new CT.slider.Slider({
 			parent: snode,
 			navButtons: false,
