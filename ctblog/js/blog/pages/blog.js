@@ -6,6 +6,7 @@ CT.require("blog.core");
 CT.onload(function() {
 	CT.initCore();
 	blog.core.db.posts(function(posts) {
+		posts.reverse();
 		CT.dom.setContent("ctmain", posts.map(function(p) {
 			var cnode = CT.dom.node(), unode = CT.dom.node(null, "div", "right");
 			blog.core.db.comments(function(comments) {
@@ -52,7 +53,9 @@ CT.onload(function() {
 				CT.dom.node(p.title, "div", "biggest bold padded"),
 				CT.dom.img(p.img, "w1"),
 				CT.dom.node(p.blurb, "div", "gray italic blockquote"),
-				CT.dom.node(p.body, "div", "padded"),
+				CT.dom.node(p.body.split("\n").map(function(sec) {
+					return sec || CT.dom.br();
+				}), "div", "padded"),
 				cnode
 			], "div", "bordered padded round");
 		}));
