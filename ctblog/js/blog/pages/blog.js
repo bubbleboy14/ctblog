@@ -48,7 +48,7 @@ CT.onload(function() {
 					CT.dom.setContent(cnode, content);
 				});
 			}, p);
-			return CT.dom.node([
+			return CT.dom.node(core.config.ctblog.post.mode == "text" ? [
 				unode,
 				CT.dom.node(p.title, "div", "biggest bold padded"),
 				CT.dom.img(p.img, "w1"),
@@ -56,6 +56,12 @@ CT.onload(function() {
 				CT.dom.node(p.body.split("\n").map(function(sec) {
 					return sec || CT.dom.br();
 				}), "div", "padded"),
+				cnode
+			] : [
+				unode,
+				CT.dom.node(p.title, "div", "biggest bold padded"),
+				CT.dom.video(p.video, "w1", null, { controls: true }),
+				CT.dom.node(p.blurb, "div", "gray italic blockquote"),
 				cnode
 			], "div", "bordered padded round");
 		}));
