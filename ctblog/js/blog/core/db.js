@@ -3,12 +3,14 @@ blog.core.db = {
 		CT.db.get("comment", cb, null, null, null, { post: post.key });
 	},
 	posts: function(cb, live, myposts) {
-		var filters = {};
+		var filters = {},
+			mtype = core.config.ctblog.post.mode == "text"
+				? "post" : "videopost";
 		if (live)
 			filters.live = true;
 		if (myposts)
 			filters.user = blog.core.util._user.key;
-		CT.db.get("post", cb, null, null, null, filters);
+		CT.db.get(mtype, cb, null, null, null, filters);
 	}
 };
 CT.db.setLimit(1000);
