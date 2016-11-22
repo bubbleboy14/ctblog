@@ -9,27 +9,33 @@ CT.onload(function() {
 		tlist = CT.dom.node(null, null, "ctlist"),
 		blurs = core.config.ctblog.post.blurs,
 		editPost = function(p) {
+			var tmode = core.config.ctblog.post.mode == "text";
 			if (p.label == blog.core.util._newPost)
 				return CT.db.withSchema(function(schema) {
-					editPost(CT.db.edit.getDefaults("post"));
+					editPost(CT.db.edit.getDefaults(tmode ? "post" : "videopost"));
 				});
 			var title = CT.dom.smartField({ blurs: blurs.title, value: p.title, classname: "w1" }),
-				img = CT.db.edit.img({ data: p }),
+				media = CT.db.edit.media({ data: p, mediaType: tmode && "img" || "video", className: "wm400p" }),
 				blurb = CT.dom.smartField({ blurs: blurs.blurb, value: p.blurb, classname: "w1 h100p", isTA: true }),
 				body = CT.dom.smartField({ blurs: blurs.body, value: p.body, classname: "w1 h400p", isTA: true }),
-				live = CT.dom.checkboxAndLabel("Go Live", p.live, null, "pointer", "right");
-			CT.dom.setContent(content, CT.dom.node([title, img, blurb, body, live, CT.dom.button("Submit", function() {
-				if (!title.value || !blurb.value || !body.value)
+				live = CT.dom.checkboxAndLabel("Go Live", p.live, null, "pointer", "right"),
+				cnodes = [title, p.key ? media : CT.dom.div("(upload media next -- first, click submit!)", "small"), blurb];
+			if (tmode)
+				cnodes.push(body);
+			cnodes.push(live);
+			cnodes.push(CT.dom.button("Submit", function() {
+				if (!title.value || !blurb.value || (tmode || !body.value))
 					return alert("please complete all fields");
 				var pdata = {
 					user: blog.core.util._user.key,
 					title: title.value,
 					blurb: blurb.value,
-					body: body.value,
 					live: live.firstChild.checked
 				};
+				if (tmode)
+					pdata.body = body.value;
 				CT.net.post("/_blog", CT.merge({
-					action: "post",
+					action: tmode && "post" || "videopost",
 					key: p.key
 				}, pdata), null, function(key) {
 					var d = CT.data.get(key);
@@ -51,7 +57,8 @@ CT.onload(function() {
 							p.node.rename(p.title);
 					}
 				});
-			})], "div", "bordered padded round"));
+			}));
+			CT.dom.setContent(content, CT.dom.div(cnodes, "bordered padded round"));
 		};
 	blog.core.db.posts(function(posts) {
 		CT.data.addSet(posts);
