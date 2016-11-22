@@ -5,6 +5,7 @@
 	},
 	"post": {
 		"name": "Post",
+		"mode": "text",
 		"blurs": {
 			"title": ["Title"],
 			"blurb": ["Blurb"],
