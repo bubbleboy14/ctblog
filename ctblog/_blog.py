@@ -1,20 +1,23 @@
 from cantools.web import respond, succeed, fail, cgi_get
-from model import Post, Comment
+from model import db, Comment
 
 def response():
-	action = cgi_get("action", choices=["post", "comment"])
+	action = cgi_get("action", choices=["post", "videopost", "comment"])
 	user = cgi_get("user")
-	if action == "post":
+	if action.endswith("post"):
 		pkey = cgi_get("key", required=False)
+		pmod = db.get_model(action)
 		if pkey:
-			ent = Post.query(Post.key == pkey).get()
+			ent = pmod.query(pmod.key == pkey).get()
 			ent.title = cgi_get("title")
 			ent.blurb = cgi_get("blurb")
-			ent.body = cgi_get("body")
 			ent.live = cgi_get("live")
+			if action != "videopost":
+				ent.body = cgi_get("body")
 		else:
-			ent = Post(user=user, title=cgi_get("title"), blurb=cgi_get("blurb"),
-				body=cgi_get("body"), live=cgi_get("live"))
+			ent = pmod(user=user, title=cgi_get("title"), blurb=cgi_get("blurb"), live=cgi_get("live"))
+			if action != "videopost":
+				ent.body = cgi_get("body")
 	elif action == "comment":
 		ent = Comment(user=user, post=cgi_get("post"), body=cgi_get("body"))
 	ent.put()
