@@ -5,7 +5,12 @@ CT.require("blog.core");
 
 CT.onload(function() {
 	CT.initCore();
-	CT.dom.setContent("ctmain", CT.dom.node(core.config.ctblog.index.blurb, "div", "blockquote"));
+	if (core.config.ctblog.index.onload)
+		core.config.ctblog.index.onload();
+	if (core.config.ctblog.index.blurb)
+		CT.dom.setContent("ctmain",
+			CT.dom.node(core.config.ctblog.index.blurb,
+				"div", "blockquote"));
 	if (core.config.ctblog.index.slider.length) {
 		var snode = CT.dom.node(null, null, "abs bottom0 w1 h200p");
 		CT.dom.addContent(document.body, snode);
