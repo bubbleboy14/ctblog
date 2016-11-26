@@ -19,7 +19,9 @@ CT.onload(function() {
 				blurb = CT.dom.smartField({ blurs: blurs.blurb, value: p.blurb, classname: "w1 h100p", isTA: true }),
 				body = CT.dom.smartField({ blurs: blurs.body, value: p.body, classname: "w1 h400p", isTA: true }),
 				live = CT.dom.checkboxAndLabel("Go Live", p.live, null, "pointer", "right"),
-				cnodes = [title, p.key ? media : CT.dom.div("(upload media next -- first, click submit!)", "small"), blurb];
+				cnodes = [title, p.key ? media : CT.dom.div("(upload media next -- first, click submit!)", "small")];
+			if (core.config.ctblog.post.blurb)
+				cnodes.push(blurb);
 			if (tmode)
 				cnodes.push(body);
 			cnodes.push(live);
@@ -29,9 +31,10 @@ CT.onload(function() {
 				var pdata = {
 					user: blog.core.util._user.key,
 					title: title.value,
-					blurb: blurb.value,
 					live: live.firstChild.checked
 				};
+				if (core.config.ctblog.post.blurb)
+					pdata.blurb = blurb.value;
 				if (tmode)
 					pdata.body = body.value;
 				CT.net.post("/_blog", CT.merge({
