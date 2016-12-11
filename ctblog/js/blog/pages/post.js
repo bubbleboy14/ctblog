@@ -26,7 +26,8 @@ CT.onload(function() {
 				cnodes.push(body);
 			cnodes.push(live);
 			cnodes.push(CT.dom.button("Submit", function() {
-				if (!title.value || !blurb.value || (tmode || !body.value))
+				if (!title.value || (core.config.ctblog.post.blurb && !blurb.value)
+					|| (tmode || !body.value))
 					return alert("please complete all fields");
 				var pdata = {
 					user: blog.core.util._user.key,
