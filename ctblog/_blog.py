@@ -11,7 +11,6 @@ def response():
 		if pkey:
 			ent = pmod.query(pmod.key == pkey).get()
 			ent.title = cgi_get("title")
-			ent.blurb = cgi_get("blurb")
 			ent.live = cgi_get("live")
 			if blurb:
 				ent.blurb = blurb
