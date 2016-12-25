@@ -14,7 +14,7 @@ blog.core.db = {
 	},
 	latest: function(cb, filters, limit, offset, sync) {
 		return blog.core.db.posts(cb, true, false,
-			filters, "created", limit || 1, offset, sync);
+			filters, "-created", limit || 1, offset, sync);
 	}
 };
 CT.db.setLimit(1000);
