@@ -5,8 +5,8 @@ CT.require("blog.core");
 
 CT.onload(function() {
 	CT.initCore();
-	var content = CT.dom.node(null, null, "ctcontent"),
-		tlist = CT.dom.node(null, null, "ctlist"),
+	var content = CT.dom.div(null, "ctcontent"),
+		tlist = CT.dom.div(null, "ctlist"),
 		blurs = core.config.ctblog.post.blurs,
 		editPost = function(p) {
 			var tmode = core.config.ctblog.post.mode == "text";
