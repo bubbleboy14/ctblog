@@ -60,7 +60,10 @@ CT.onload(function() {
 			] : [
 				unode,
 				CT.dom.node(p.title, "div", "biggest bold padded"),
-				CT.dom.video(p.video, "w1", null, { controls: true }),
+				CT.dom.video(p.video, "w1", null, {
+					controls: true,
+					poster: p.poster || core.config.ctblog.post.poster
+				}),
 				CT.dom.node(p.blurb, "div", "gray italic blockquote"),
 				cnode
 			], "div", "bordered padded round");

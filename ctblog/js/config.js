@@ -10,6 +10,7 @@
 	"post": {
 		"name": "Post",
 		"mode": "text",
+		"poster": null,
 		"blurb": true,
 		"blurs": {
 			"title": ["Title"],
