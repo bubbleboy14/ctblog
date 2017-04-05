@@ -12,6 +12,7 @@ model = {
 	"ctblog.model": ["*"]
 }
 routes = {
-	"/_blog": "_blog.py"
+	"/_blog": "_blog.py",
+	"/_vproc": "_vproc.py"
 }
 requires = ["ctuser"]
