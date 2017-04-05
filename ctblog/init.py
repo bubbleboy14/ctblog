@@ -3,7 +3,7 @@ copies = {
 	"css": ["custom.css"]
 }
 syms = {
-	".": ["_blog.py"],
+	".": ["_blog.py", "_vproc.py"],
 	"js": ["blog"],
 	"css": ["blog.css"],
 	"html": ["blog"]
