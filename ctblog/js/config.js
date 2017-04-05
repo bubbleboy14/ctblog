@@ -22,5 +22,8 @@
 		"blurs": {
 			"comment": ["Comment"]
 		}
+	},
+	"media": {
+		"hls": false
 	}
 }

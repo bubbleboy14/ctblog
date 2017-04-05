@@ -18,6 +18,21 @@ CT.onload(function() {
 				media = CT.db.edit.media({ data: p, mediaType: tmode && "img" || "video", className: "wm400p" }),
 				blurb = CT.dom.smartField({ blurs: blurs.blurb, value: p.blurb, classname: "w1 h100p", isTA: true }),
 				body = CT.dom.smartField({ blurs: blurs.body, value: p.body, classname: "w1 h400p", isTA: true }),
+				vproc = CT.dom.button("Transcode HLS", function() {
+					vproc.innerHTML = "Transcoding...";
+					vproc.disabled = true;
+					CT.net.post({
+						path: "/_vproc",
+						spinner: true,
+						params: {
+							v: p.key
+						},
+						cb: function() {
+							alert("great, you did it!");
+							CT.dom.hide(vproc);
+						}
+					});
+				}, "hidden"),
 				live = CT.dom.checkboxAndLabel("Go Live", p.live, null, "pointer", "right"),
 				cnodes = [title, p.key ? media : CT.dom.div("(upload media next -- first, click submit!)", "small")];
 			if (core.config.ctblog.post.blurb)
@@ -25,6 +40,20 @@ CT.onload(function() {
 			if (tmode)
 				cnodes.push(body);
 			cnodes.push(live);
+			if (p.key && core.config.ctblog.media.hls) {
+				cnodes.push(vproc);
+				CT.net.post({
+					path: "/_vproc",
+					params: {
+						v: p.key,
+						check: true
+					},
+					cb: function(hls) {
+						if (!hls)
+							CT.dom.show(vproc);
+					}
+				});
+			}
 			cnodes.push(CT.dom.button("Submit", function() {
 				if (!title.value || (core.config.ctblog.post.blurb && !blurb.value)
 					|| (tmode && !body.value))
