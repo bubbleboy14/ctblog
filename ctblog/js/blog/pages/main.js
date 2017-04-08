@@ -35,7 +35,7 @@ CT.onload(function() {
 			CT.dom.node(core.config.ctblog.index.blurb,
 				"div", "blockquote"));
 	if (core.config.ctblog.index.slider.length) {
-		var snode = CT.dom.node(null, null, core.config.ctblob.slider_class);
+		var snode = CT.dom.node(null, null, core.config.ctblog.slider_class);
 		CT.dom.addContent(document.body, snode);
 		document.body.classList.add("footered");
 		new CT.slider.Slider({
