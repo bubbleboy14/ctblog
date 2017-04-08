@@ -10,7 +10,7 @@ CT.onload(function() {
 			CT.dom.node(core.config.ctblog.about.blurb,
 				"div", "blockquote"));
 	if (core.config.ctblog.about.slider.length) {
-		var snode = CT.dom.node(null, null, "abs bottom0 w1 h200p");
+		var snode = CT.dom.node(null, null, core.config.ctblog.slider_class);
 		CT.dom.addContent(document.body, snode);
 		document.body.classList.add("footered");
 		new CT.slider.Slider({
