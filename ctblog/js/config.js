@@ -1,5 +1,6 @@
 {
 	"index": {
+		"latest": false,
 		"slider": [],
 		"blurb": "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem"
 	},
@@ -9,7 +10,7 @@
 	},
 	"post": {
 		"name": "Post",
-		"mode": "text",
+		"mode": "post",
 		"poster": null,
 		"blurb": true,
 		"blurs": {
