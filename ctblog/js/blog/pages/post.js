@@ -9,10 +9,10 @@ CT.onload(function() {
 		tlist = CT.dom.div(null, "ctlist"),
 		blurs = core.config.ctblog.post.blurs,
 		editPost = function(p) {
-			var tmode = core.config.ctblog.post.mode == "text";
+			var tmode = core.config.ctblog.post.mode == "post";
 			if (p.label == blog.core.util._newPost)
 				return CT.db.withSchema(function(schema) {
-					editPost(CT.db.edit.getDefaults(tmode ? "post" : "videopost"));
+					editPost(CT.db.edit.getDefaults(core.config.ctblog.post.mode));
 				});
 			var title = CT.dom.smartField({ blurs: blurs.title, value: p.title, classname: "w1" }),
 				media = CT.db.edit.media({ data: p, mediaType: tmode && "img" || "video", className: "wm400p" }),
@@ -68,7 +68,7 @@ CT.onload(function() {
 				if (tmode)
 					pdata.body = body.value;
 				CT.net.post("/_blog", CT.merge({
-					action: tmode && "post" || "videopost",
+					action: core.config.ctblog.post.mode,
 					key: p.key
 				}, pdata), null, function(key) {
 					var d = CT.data.get(key);
