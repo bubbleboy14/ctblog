@@ -56,7 +56,7 @@ blog.core.media = {
 			content: blog.core.media.photo(photo, pset, function(key) {
 				if (isnew) {
 					pset.photos.push(key);
-					grid && grid.addCell(blog.core.media.photo2data(key));
+					grid && grid.addCell(blog.core.media.photo2data(key, pset));
 				}
 				m.hide();
 			}, !isnew && function() {
@@ -69,20 +69,22 @@ blog.core.media = {
 		});
 		m.show();
 	},
-	photo2data: function(item) {
+	photo2data: function(item, pset) {
 		var photo = CT.data.get(item);
 		return {
 			id: photo.key,
 			img: photo.img,
 			label: photo.caption,
 			onclick: function() {
-				blog.core.media.photomodal(photo, d);
+				blog.core.media.photomodal(photo, pset);
 			}
 		};
 	},
 	photoset: function(d, pnode) {
 		CT.db.multi(d.photos, function() {
-			var gnode = CT.layout.grid(d.photos.map(blog.core.media.photo2data));
+			var gnode = CT.layout.grid(d.photos.map(function(p) {
+				return blog.core.media.photo2data(p, d);
+			}));
 			CT.dom.setContent(pnode || "ctmain", [
 				CT.dom.button("Add Photo", function() {
 					(new CT.modal.Prompt({
@@ -101,7 +103,7 @@ blog.core.media = {
 								};
 								CT.data.add(pdata);
 								blog.core.media.photomodal(pdata, d, gnode);
-							})
+							});
 						}
 					})).show();
 				}, "right"),
