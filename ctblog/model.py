@@ -16,6 +16,7 @@ class VideoPost(BasePost): # rename this, simplify code, migrate old dbs?
 class Photo(db.TimeStampedBase):
 	img = db.Binary()
 	caption = db.String()
+	label = "caption"
 
 class PhotoSet(BasePost):
 	photos = db.ForeignKey(repeated=True, kind=Photo)
