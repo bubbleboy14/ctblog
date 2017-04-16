@@ -1,5 +1,5 @@
 from cantools.web import respond, succeed, fail, cgi_get
-from model import db, Comment
+from model import db, Comment, Photo
 
 def response():
 	action = cgi_get("action", choices=["post", "videopost", "comment", "photo", "photoset"])
@@ -12,7 +12,9 @@ def response():
 			ent = Photo.query(Photo.key == pkey).get()
 		else:
 			ent = Photo()
-		ent.caption = cgi_get("caption") # imgs uploaded separately
+		capt = cgi_get("caption", required=False) # imgs uploaded separately
+		if capt:
+			ent.caption = capt
 	else:
 		blurb = cgi_get("blurb", required=False)
 		pkey = cgi_get("key", required=False)
@@ -27,9 +29,16 @@ def response():
 			ent.blurb = blurb
 		if action == "post":
 			ent.body = cgi_get("body")
-		elif action == "photoset":
-			ent.photos = cgi_get("photos")
 	ent.put()
+	if action == "photo": # get photoset
+		psk = cgi_get("photoset", required=False)
+		if psk:
+			ps = db.get(psk)
+			if cgi_get("remove", default=False):
+				ps.photos.remove(ent.key)
+			else:
+				ps.photos.append(ent.key)
+			ps.put()
 	succeed(ent.id())
 
 respond(response)
