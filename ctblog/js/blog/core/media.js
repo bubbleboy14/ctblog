@@ -11,8 +11,7 @@ blog.core.media = {
 			: d[0].video, "full", null, opts);
 	},
 	photo: function(d, ps, savecb, rmcb, mcb) {
-		var caption = CT.dom.field(null, d.caption, "w19-20");
-		return CT.dom.div([
+		var caption = CT.dom.field(null, d.caption, "w19-20"), content = [
 			CT.db.edit.media({
 				cb: mcb,
 				data: d,
@@ -21,7 +20,7 @@ blog.core.media = {
 			caption,
 			CT.dom.button("Save", function() {
 				if (caption.value == d.caption)
-					return savecb && savecb();
+					return savecb && savecb(d.key);
 				CT.net.post("/_blog", {
 					key: d.key,
 					action: "photo",
@@ -31,8 +30,10 @@ blog.core.media = {
 					d.caption = caption.value;
 					savecb && savecb(key);
 				});
-			}),
-			CT.dom.button("Remove", function() {
+			})
+		];
+		if (rmcb) {
+			content.push(CT.dom.button("Remove", function() {
 				if (!confirm("really remove this picture from the current photoset?"))
 					return;
 				CT.net.post("/_blog", {
@@ -43,19 +44,22 @@ blog.core.media = {
 					photoset: ps.key,
 					user: blog.core.util._user.key
 				});
-			})
-		]);
+			}));
+		}
+		return CT.dom.div(content);
 	},
 	photomodal: function(photo, pset, grid) {
-		var m = new CT.modal.Modal({
+		var isnew = pset.photos.indexOf(photo.key) == -1, m = new CT.modal.Modal({
+			noClose: true,
 			transition: "slide",
+			className: "basicpopup hminit",
 			content: blog.core.media.photo(photo, pset, function(key) {
-				if (key && d.photos.indexOf(key) == -1) {
-					d.photos.push(key);
+				if (isnew) {
+					pset.photos.push(key);
 					grid && grid.addCell(blog.core.media.photo2data(key));
 				}
 				m.hide();
-			}, function() {
+			}, !isnew && function() {
 				CT.dom.remove(photo.key);
 				CT.data.remove(pset.photos, photo.key);
 				m.hide();
