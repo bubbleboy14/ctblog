@@ -1,7 +1,7 @@
 blog.core.util = {
 	_newPost: "<b>New " + core.config.ctblog.post.name + "</b>",
 	post: function(p) {
-		var cnode = CT.dom.node(), unode = CT.dom.node(null, "div", "right"),
+		var cnode = CT.dom.node(), unode = CT.dom.div(null, "right"),
 			cfg = core.config.ctblog;
 		blog.core.db.comments(function(comments) {
 			var required = comments.map(function(c) {
@@ -12,10 +12,10 @@ blog.core.util = {
 				var poster = CT.data.get(p.user);
 				CT.dom.setContent(unode, CT.dom.link([
 					CT.dom.img(poster.img, "w100 block"),
-					CT.dom.node(poster.firstName + " " + poster.lastName, "div", "small centered")
+					CT.dom.div(poster.firstName + " " + poster.lastName, "small centered")
 				], null, "/user/profile.html#" + p.key, "round block hoverglow"));
 				var content = [
-					CT.dom.node("Comments", "div", "bigger bold"),
+					CT.dom.div("Comments", "bigger bold"),
 					comments.map(blog.core.util.comment)
 				];
 				if (blog.core.util._user)
@@ -45,12 +45,12 @@ blog.core.util = {
 		if (cfg.post.mode == "post") {
 			return CT.dom.div([
 				unode,
-				CT.dom.node(p.title, "div", "biggest bold padded"),
+				CT.dom.div(p.title, "biggest bold padded"),
 				CT.dom.img(p.img, "w1"),
-				CT.dom.node(p.blurb, "div", "gray italic blockquote"),
-				CT.dom.node(p.body.split("\n").map(function(sec) {
+				CT.dom.div(p.blurb, "gray italic blockquote"),
+				CT.dom.div(p.body.split("\n").map(function(sec) {
 					return sec || CT.dom.br();
-				}), "div", "padded"),
+				}), "padded"),
 				cnode
 			], "bordered padded round");
 		} else if (cfg.post.mode == "videopost") {
@@ -169,14 +169,14 @@ blog.core.util = {
 	},
 	comment: function(c) {
 		var u = CT.data.get(c.user);
-		return CT.dom.node([
+		return CT.dom.div([
 			CT.dom.link([
 				CT.dom.img(u.img, "h50 vmiddle"),
 				CT.dom.pad(),
 				CT.dom.node(u.firstName, "b", "h50 round hoverglow")
 			], null, "/user/profile.html#" + u.key),
-			CT.dom.node(": " + c.body, "span")
-		], "div", "margined padded bordered round");
+			CT.dom.span(": " + c.body)
+		], "margined padded bordered round");
 	},
 	latest: function() {
 		var cfg = core.config.ctblog;
