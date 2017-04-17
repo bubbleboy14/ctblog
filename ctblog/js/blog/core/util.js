@@ -57,10 +57,7 @@ blog.core.util = {
 			return CT.dom.div([
 				unode,
 				CT.dom.div(p.title, "biggest bold padded"),
-				CT.dom.video(p.video, "w1", null, {
-					controls: true,
-					poster: p.poster || cfg.post.poster
-				}),
+				blog.core.media.setvideo(p, CT.dom.div()),
 				CT.dom.div(p.blurb, "gray italic blockquote"),
 				cnode
 			], "bordered padded round");
@@ -182,20 +179,11 @@ blog.core.util = {
 		var cfg = core.config.ctblog;
 		blog.core.db.latest(function(d) {
 			if (cfg.post.mode == "post")
-				CT.dom.setContent("ctmain", blog.core.util.post(d));
-			else if (cfg.post.mode == "videopost") {
-				CT.net.post({
-					path: "/_vproc",
-					params: {
-						v: d[0].key,
-						check: true
-					},
-					cb: function(hls) {
-						CT.dom.setContent("ctmain", blog.core.media.video(d, hls));
-					}
-				});
-			} else if (cfg.post.mode == "photoset")
-				blog.core.media.photoset();
+				CT.dom.setContent("ctmain", blog.core.util.post(d[0]));
+			else if (cfg.post.mode == "videopost")
+				blog.core.media.setvideo(d[0], null, true);
+			else if (cfg.post.mode == "photoset")
+				blog.core.media.photoset(d[0]);
 		});
 	}
 };

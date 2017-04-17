@@ -1,14 +1,27 @@
 blog.core.media = {
-	video: function(d, hls) {
+	video: function(d, hls, autoplay) {
 		var opts = {
 			controls: true,
-			poster: d[0].poster || core.config.ctblog.post.poster
+			poster: d.poster || core.config.ctblog.post.poster
 		};
-		if (!CT.info.androidTablet)
+		if (autoplay && !CT.info.androidTablet)
 			opts.autoplay = true;
 		return CT.dom.video(((CT.info.iOs || CT.info.androidTablet) && hls)
-			? d[0].video.replace("/blob/", "/blob/hls/") + "/list.m3u8"
-			: d[0].video, "full", null, opts);
+			? d.video.replace("/blob/", "/blob/hls/") + "/list.m3u8"
+			: d.video, "full", null, opts);
+	},
+	setvideo: function(d, pnode, autoplay) {
+		CT.net.post({
+			path: "/_vproc",
+			params: {
+				v: d.key,
+				check: true
+			},
+			cb: function(hls) {
+				CT.dom.setContent(pnode || "ctmain", blog.core.media.video(d, hls, autoplay));
+			}
+		});
+		return pnode;
 	},
 	photo: function(d, ps, savecb, rmcb, mcb) {
 		var caption = CT.dom.field(null, d.caption, "w19-20"), content = [
