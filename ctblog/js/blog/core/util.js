@@ -42,7 +42,7 @@ blog.core.util = {
 				CT.dom.setContent(cnode, content);
 			});
 		}, p);
-		if (cf.post.mode == "post") {
+		if (cfg.post.mode == "post") {
 			return CT.dom.div([
 				unode,
 				CT.dom.node(p.title, "div", "biggest bold padded"),
@@ -71,7 +71,7 @@ blog.core.util = {
 					parent: pnode,
 					navButtons: false,
 					frames: p.photos.map(function(item) {
-						var photo = CT.data.get(itme);
+						var photo = CT.data.get(item);
 						return {
 							title: photo.caption,
 							img: photo.img
