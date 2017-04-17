@@ -33,11 +33,13 @@ def response():
 	if action == "photo": # get photoset
 		psk = cgi_get("photoset", required=False)
 		if psk:
-			ps = db.get(psk)
+			ps = db.get(psk) # these are hacky -- fix list ops in ct
 			if cgi_get("remove", default=False):
-				ps.photos.remove(ent.key)
+#				ps.photos.remove(ent.key)
+				ps.photos = [p for p in ps.photos if p != ent.key]
 			else:
-				ps.photos.append(ent.key)
+#				ps.photos.append(ent.key)
+				ps.photos = ps.photos + [ent.key]
 			ps.put()
 	succeed(ent.id())
 
