@@ -147,6 +147,8 @@ blog.core.util = {
 					d = pdata;
 					d.key = key;
 					d.label = d.title;
+					if (core.config.ctblog.post.mode == "photoset")
+						d.photos = [];
 					CT.data.add(d);
 					var t = CT.panel.trigger(d, function(d) { blog.core.util.edit(d, pnode, tlist); });
 					if (tlist.firstChild.nextSibling)
