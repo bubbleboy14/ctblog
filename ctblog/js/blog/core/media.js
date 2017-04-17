@@ -1,5 +1,24 @@
 blog.core.media = {
-	video: function(d, hls, autoplay) {
+	item: function(p) {
+		if (p.key) {
+			var mode = core.config.ctblog.post.mode;
+			if (mode == "photoset") {
+				var pnode = CT.dom.div();
+				blog.core.media.photo.set(p, pnode);
+				return pnode;
+			}
+			return CT.db.edit.media({
+				data: p,
+				mediaType: (mode == "post") && "img" || "video",
+				className: "wm400p"
+			});
+		} else
+			return CT.dom.div("(upload media next -- first, click submit!)", "small");
+	}
+};
+
+blog.core.media.video = {
+	node: function(d, hls, autoplay) {
 		var opts = {
 			controls: true,
 			poster: d.poster || core.config.ctblog.post.poster
@@ -10,7 +29,7 @@ blog.core.media = {
 			? d.video.replace("/blob/", "/blob/hls/") + "/list.m3u8"
 			: d.video, "full", null, opts);
 	},
-	setvideo: function(d, pnode, autoplay) {
+	set: function(d, pnode, autoplay) {
 		CT.net.post({
 			path: "/_vproc",
 			params: {
@@ -18,12 +37,15 @@ blog.core.media = {
 				check: true
 			},
 			cb: function(hls) {
-				CT.dom.setContent(pnode || "ctmain", blog.core.media.video(d, hls, autoplay));
+				CT.dom.setContent(pnode || "ctmain", blog.core.media.video.node(d, hls, autoplay));
 			}
 		});
 		return pnode;
-	},
-	photo: function(d, ps, savecb, rmcb, mcb) {
+	}
+};
+
+blog.core.media.photo = {
+	node: function(d, ps, savecb, rmcb, mcb) {
 		var caption = CT.dom.field(null, d.caption, "w19-20"), content = [
 			CT.db.edit.media({
 				cb: mcb,
@@ -60,15 +82,15 @@ blog.core.media = {
 		}
 		return CT.dom.div(content);
 	},
-	photomodal: function(photo, pset, grid) {
+	modal: function(photo, pset, grid) {
 		var isnew = pset.photos.indexOf(photo.key) == -1, m = new CT.modal.Modal({
 			noClose: true,
 			transition: "slide",
 			className: "basicpopup hminit",
-			content: blog.core.media.photo(photo, pset, function(key) {
+			content: blog.core.media.photo.node(photo, pset, function(key) {
 				if (isnew) {
 					pset.photos.push(key);
-					grid && grid.addCell(blog.core.media.photo2data(key, pset));
+					grid && grid.addCell(blog.core.media.photo.data(key, pset));
 				}
 				m.hide();
 			}, !isnew && function() {
@@ -81,21 +103,21 @@ blog.core.media = {
 		});
 		m.show();
 	},
-	photo2data: function(item, pset) {
+	data: function(item, pset) {
 		var photo = CT.data.get(item);
 		return {
 			id: photo.key,
 			img: photo.img,
 			label: photo.caption,
 			onclick: function() {
-				blog.core.media.photomodal(photo, pset);
+				blog.core.media.photo.modal(photo, pset);
 			}
 		};
 	},
-	photoset: function(d, pnode) {
+	set: function(d, pnode) {
 		CT.db.multi(d.photos, function() {
 			var gnode = CT.layout.grid(d.photos.map(function(p) {
-				return blog.core.media.photo2data(p, d);
+				return blog.core.media.photo.data(p, d);
 			}));
 			CT.dom.setContent(pnode || "ctmain", [
 				CT.dom.button("Add Photo", function() {
@@ -114,7 +136,7 @@ blog.core.media = {
 									caption: caption
 								};
 								CT.data.add(pdata);
-								blog.core.media.photomodal(pdata, d, gnode);
+								blog.core.media.photo.modal(pdata, d, gnode);
 							});
 						}
 					})).show();
@@ -122,21 +144,5 @@ blog.core.media = {
 				gnode
 			]);
 		});
-	},
-	item: function(p) {
-		if (p.key) {
-			var mode = core.config.ctblog.post.mode;
-			if (mode == "photoset") {
-				var pnode = CT.dom.div();
-				blog.core.media.photoset(p, pnode);
-				return pnode;
-			}
-			return CT.db.edit.media({
-				data: p,
-				mediaType: (mode == "post") && "img" || "video",
-				className: "wm400p"
-			});
-		} else
-			return CT.dom.div("(upload media next -- first, click submit!)", "small");
 	}
 };

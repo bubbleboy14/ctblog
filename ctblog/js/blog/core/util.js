@@ -57,7 +57,7 @@ blog.core.util = {
 			return CT.dom.div([
 				unode,
 				CT.dom.div(p.title, "biggest bold padded"),
-				blog.core.media.setvideo(p, CT.dom.div()),
+				blog.core.media.video.set(p, CT.dom.div()),
 				CT.dom.div(p.blurb, "gray italic blockquote"),
 				cnode
 			], "bordered padded round");
@@ -181,9 +181,9 @@ blog.core.util = {
 			if (cfg.post.mode == "post")
 				CT.dom.setContent("ctmain", blog.core.util.post(d[0]));
 			else if (cfg.post.mode == "videopost")
-				blog.core.media.setvideo(d[0], null, true);
+				blog.core.media.video.set(d[0], null, true);
 			else if (cfg.post.mode == "photoset")
-				blog.core.media.photoset(d[0]);
+				blog.core.media.photo.set(d[0]);
 		});
 	}
 };
