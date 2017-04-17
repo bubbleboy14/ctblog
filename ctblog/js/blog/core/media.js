@@ -37,13 +37,12 @@ blog.core.media = {
 				if (!confirm("really remove this picture from the current photoset?"))
 					return;
 				CT.net.post("/_blog", {
-					cb: rmcb,
 					key: d.key,
 					remove: true,
 					action: "photo",
 					photoset: ps.key,
 					user: blog.core.util._user.key
-				});
+				}, null, rmcb);
 			}));
 		}
 		return CT.dom.div(content);
