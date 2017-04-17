@@ -54,14 +54,14 @@ blog.core.util = {
 				cnode
 			], "bordered padded round");
 		} else if (cfg.post.mode == "videopost") {
-			return CT.dom.node([
+			return CT.dom.div([
 				unode,
-				CT.dom.node(p.title, "div", "biggest bold padded"),
+				CT.dom.div(p.title, "biggest bold padded"),
 				CT.dom.video(p.video, "w1", null, {
 					controls: true,
 					poster: p.poster || cfg.post.poster
 				}),
-				CT.dom.node(p.blurb, "div", "gray italic blockquote"),
+				CT.dom.div(p.blurb, "gray italic blockquote"),
 				cnode
 			], "bordered padded round");
 		} else if (cfg.post.mode == "photoset") {
