@@ -9,7 +9,7 @@ def response():
 	if config.autoexpire: # in days
 		log("checking for expired VideoPosts", 1)
 		n = datetime.now()
-		cutoff = n - timedelta(config.autoexpire)
+		cutoff = n - timedelta(int(config.autoexpire))
 		expired = VideoPost.query(VideoPost.modified < cutoff).all()
 		log("deactivating %s expired VideoPosts"%(len(expired),), 2)
 		for vp in expired:
