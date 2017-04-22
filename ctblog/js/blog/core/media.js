@@ -1,5 +1,5 @@
 blog.core.media = {
-	item: function(p) {
+	item: function(p, opts) {
 		if (p.key) {
 			var mode = core.config.ctblog.post.mode;
 			if (mode == "photoset") {
@@ -7,11 +7,11 @@ blog.core.media = {
 				blog.core.media.photo.set(p, pnode);
 				return pnode;
 			}
-			return CT.db.edit.media({
+			return CT.db.edit.media(CT.merge(opts, {
 				data: p,
 				mediaType: (mode == "post") && "img" || "video",
 				className: "wm400p"
-			});
+			}));
 		} else
 			return CT.dom.div("(upload media next -- first, click submit!)", "small");
 	}
