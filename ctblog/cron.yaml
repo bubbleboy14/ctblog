@@ -1,0 +1,4 @@
+cron:
+- description: basic scan
+  url: /cronscan
+  schedule: every 1 hours
