@@ -12,6 +12,7 @@ class Post(BasePost):
 
 class VideoPost(BasePost): # rename this, simplify code, migrate old dbs?
 	video = db.Binary()
+	poster = db.Binary()
 
 class Photo(db.TimeStampedBase):
 	img = db.Binary()
