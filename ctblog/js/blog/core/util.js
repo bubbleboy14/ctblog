@@ -80,11 +80,12 @@ blog.core.util = {
 		}
 	},
 	edit: function(p, pnode, tlist) {
-		var blurs = core.config.ctblog.post.blurs,
-			tmode = core.config.ctblog.post.mode == "post";
+		var cfg = core.config.ctblog.post,
+			blurs = cfg.blurs,
+			tmode = cfg.mode == "post";
 		if (p.label == blog.core.util._newPost)
 			return CT.db.withSchema(function(schema) {
-				blog.core.util.edit(CT.db.edit.getDefaults(core.config.ctblog.post.mode), pnode, tlist);
+				blog.core.util.edit(CT.db.edit.getDefaults(cfg.mode), pnode, tlist);
 			});
 		var title = CT.dom.smartField({ blurs: blurs.title, value: p.title, classname: "w1" }),
 			blurb = CT.dom.smartField({ blurs: blurs.blurb, value: p.blurb, classname: "w1 h100p", isTA: true }),
@@ -106,10 +107,16 @@ blog.core.util = {
 			}, "hidden"),
 			live = CT.dom.checkboxAndLabel("Go Live", p.live, null, "pointer", "right"),
 			cnodes = [title, blog.core.media.item(p)];
-		if (core.config.ctblog.post.blurb)
+		if (cfg.blurb)
 			cnodes.push(blurb);
 		if (tmode)
 			cnodes.push(body);
+		else if (p.key && cfg.mode == "videopost") {
+			cnodes.push([
+				CT.dom.div("Select Poster Image Below", "bigger pt10"),
+				blog.core.media.item(p, { mediaType: "img", property: "poster" })
+			]);
+		}
 		cnodes.push(live);
 		if (p.key && core.config.ctblog.media.hls) {
 			cnodes.push(vproc);
@@ -126,7 +133,7 @@ blog.core.util = {
 			});
 		}
 		cnodes.push(CT.dom.button("Submit", function() {
-			if (!title.value || (core.config.ctblog.post.blurb && !blurb.value)
+			if (!title.value || (cfg.blurb && !blurb.value)
 				|| (tmode && !body.value))
 				return alert("please complete all fields");
 			var pdata = {
@@ -139,7 +146,7 @@ blog.core.util = {
 			if (tmode)
 				pdata.body = body.value;
 			CT.net.post("/_blog", CT.merge({
-				action: core.config.ctblog.post.mode,
+				action: cfg.mode,
 				key: p.key
 			}, pdata), null, function(key) {
 				var d = CT.data.get(key);
@@ -147,7 +154,7 @@ blog.core.util = {
 					d = pdata;
 					d.key = key;
 					d.label = d.title;
-					if (core.config.ctblog.post.mode == "photoset")
+					if (cfg.mode == "photoset")
 						d.photos = [];
 					CT.data.add(d);
 					var t = CT.panel.trigger(d, function(d) { blog.core.util.edit(d, pnode, tlist); });
