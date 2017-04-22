@@ -27,7 +27,7 @@ blog.core.media.video = {
 			opts.autoplay = true;
 		return CT.dom.video(((CT.info.iOs || CT.info.androidTablet) && hls)
 			? d.video.replace("/blob/", "/blob/hls/") + "/list.m3u8"
-			: d.video, "full", null, opts);
+			: d.video, core.config.ctblog.video_class || "full", null, opts);
 	},
 	set: function(d, pnode, autoplay) {
 		CT.net.post({

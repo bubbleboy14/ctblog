@@ -184,11 +184,13 @@ blog.core.util = {
 			CT.dom.span(": " + c.body)
 		], "margined padded bordered round");
 	},
-	latest: function(emptycb) {
+	latest: function(emptycb, hitcb) {
 		var cfg = core.config.ctblog;
 		blog.core.db.latest(function(d) {
 			if (!d || !d.length)
 				emptycb && emptycb();
+			else if (hitcb)
+				hitcb(d[0]);
 			else if (cfg.post.mode == "post")
 				CT.dom.setContent("ctmain", blog.core.util.post(d[0]));
 			else if (cfg.post.mode == "videopost")
