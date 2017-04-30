@@ -97,6 +97,7 @@ blog.core.util = {
 					path: "/_vproc",
 					spinner: true,
 					params: {
+						action: "hls",
 						v: p.key
 					},
 					cb: function() {
@@ -124,7 +125,8 @@ blog.core.util = {
 				path: "/_vproc",
 				params: {
 					v: p.key,
-					check: true
+					check: true,
+					action: "hls"
 				},
 				cb: function(hls) {
 					if (!hls)

@@ -25,7 +25,8 @@
 		}
 	},
 	"media": {
-		"hls": false
+		"hls": false,
+		"mp4": false
 	},
 	"slider_class": "abs bottom0 w1 h120p"
 }

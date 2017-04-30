@@ -7,11 +7,26 @@ blog.core.media = {
 				blog.core.media.photo.set(p, pnode);
 				return pnode;
 			}
-			return CT.db.edit.media(CT.merge(opts, {
+			var mopts = {
 				data: p,
 				mediaType: (mode == "post") && "img" || "video",
 				className: "wm400p"
-			}));
+			};
+			if (mode == "videopost" && core.config.ctblog.media.mp4) {
+				mopts.cb = function() {
+					if (confirm("re-encode as mp4?")) {
+						CT.net.post({
+							spinner: true,
+							path: "/_vproc",
+							params: {
+								action: "mp4",
+								v: p.key
+							}
+						})
+					}
+				};
+			}
+			return CT.db.edit.media(CT.merge(opts, mopts));
 		} else
 			return CT.dom.div("(upload media next -- first, click submit!)", "small");
 	}
@@ -34,7 +49,8 @@ blog.core.media.video = {
 			path: "/_vproc",
 			params: {
 				v: d.key,
-				check: true
+				check: true,
+				action: "hls"
 			},
 			cb: function(hls) {
 				CT.dom.setContent(pnode || "ctmain", blog.core.media.video.node(d, hls, autoplay));
