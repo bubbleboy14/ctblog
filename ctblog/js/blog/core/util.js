@@ -119,7 +119,7 @@ blog.core.util = {
 			]);
 		}
 		cnodes.push(live);
-		if (p.key && core.config.ctblog.media.hls) {
+		if (p.key && p.video && core.config.ctblog.media.hls) {
 			cnodes.push(vproc);
 			CT.net.post({
 				path: "/_vproc",

@@ -4,7 +4,10 @@ from model import db
 
 def response():
 	action = cgi_get("action")
-	vpath = db.get(cgi_get("v")).video.urlsafe()[1:]
+	vid = db.get(cgi_get("v")).video
+	if not vid: # no vid to process
+		succeed()
+	vpath = vid.urlsafe()[1:]
 	if action == "hls":
 		succeed(hlsify(vpath, check=cgi_get("check", default=False)))
 	elif action == "mp4":
