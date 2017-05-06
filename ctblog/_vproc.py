@@ -11,6 +11,6 @@ def response():
 	if action == "hls":
 		succeed(hlsify(vpath, check=cgi_get("check", default=False)))
 	elif action == "mp4":
-		transcode(vpath, fast=False)
+		transcode(vpath, slow=True)
 
 respond(response, threaded=True)
