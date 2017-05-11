@@ -62,7 +62,7 @@ blog.core.util = {
 				cnode
 			], "bordered padded round");
 		} else if (cfg.post.mode == "photoset") {
-			var snode = CT.dom.div(null, "relative w1 h400p"),
+			var snode = CT.dom.div(null, "relative noflow w1 h400p"),
 				pnode = CT.dom.div([
 					CT.dom.div(p.title, "bigger bold padded centered"),
 					snode,
@@ -75,8 +75,11 @@ blog.core.util = {
 					frames: p.photos.map(function(item) {
 						var photo = CT.data.get(item);
 						return {
-							title: photo.caption,
-							img: photo.img
+							img: photo.img,
+							tab: {
+								content: CT.dom.div(photo.caption, "big p10"),
+								origin: "bottom"
+							}
 						};
 					})
 				});
