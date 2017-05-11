@@ -62,10 +62,15 @@ blog.core.util = {
 				cnode
 			], "bordered padded round");
 		} else if (cfg.post.mode == "photoset") {
-			var pnode = CT.dom.div();
+			var snode = CT.dom.div(null, "relative w1 h400p"),
+				pnode = CT.dom.div([
+					CT.dom.div(p.title, "bigger bold padded centered"),
+					snode,
+					CT.dom.div(p.blurb, "padded")
+				]);
 			CT.db.multi(p.photos, function() {
 				new CT.slider.Slider({
-					parent: pnode,
+					parent: snode,
 					navButtons: false,
 					frames: p.photos.map(function(item) {
 						var photo = CT.data.get(item);
