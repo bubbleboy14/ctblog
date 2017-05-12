@@ -62,29 +62,69 @@ blog.core.util = {
 				cnode
 			], "bordered padded round");
 		} else if (cfg.post.mode == "photoset") {
-			var snode = CT.dom.div(null, "relative noflow w1 h400p"),
-				pnode = CT.dom.div([
-					CT.dom.div(p.title, "bigger bold padded centered"),
-					snode,
-					CT.dom.div(p.blurb, "padded")
-				]);
-			CT.db.multi(p.photos, function() {
-				new CT.slider.Slider({
-					parent: snode,
-					navButtons: false,
-					frames: p.photos.map(function(item) {
-						var photo = CT.data.get(item);
-						return {
-							img: photo.img,
-							tab: {
-								content: CT.dom.div(photo.caption, "big p10"),
-								origin: "bottom"
-							}
-						};
-					})
+			if (cfg.blog.photoset_embed) {
+				var bnode = CT.dom.div(null, "padded"),
+					pnode = CT.dom.div([
+						CT.dom.div(p.title, "bigger bold padded centered"),
+						bnode
+					]),
+					bsplit = p.blurb.split("\n"),
+					ipos = "right",
+					content = [], pnum = 0, pushPhoto = function(bottom) {
+						var photo = CT.data.get(p.photos[pnum]);
+						if (photo) {
+							content.push(CT.dom.img({
+								imgclass: "padded " + (bottom && "h200p" || ("w1-4 " + ipos)),
+								title: photo.caption,
+								src: photo.img,
+								onclick: function() {
+									(new CT.modal.Modal({
+										content: CT.dom.img(photo.img, "w1")
+									})).show();
+								}
+							}));
+							ipos = ipos == "right" ? "left" : "right";
+							pnum += 1;
+						}
+					};
+				CT.db.multi(p.photos, function() {
+					bsplit.forEach(function(par) {
+						if (par)
+							content.push(CT.dom.div(par, "padded"));
+						else
+							pushPhoto();
+					});
+					content.push(CT.dom.div(null, "clearnode"));
+					while (p.photos[pnum])
+						pushPhoto(true);
+					CT.dom.setContent(bnode, content);
 				});
-			});
-			return pnode;
+				return pnode;
+			} else {
+				var snode = CT.dom.div(null, "relative noflow w1 h400p"),
+					pnode = CT.dom.div([
+						CT.dom.div(p.title, "bigger bold padded centered"),
+						snode,
+						CT.dom.div(p.blurb, "padded")
+					]);
+				CT.db.multi(p.photos, function() {
+					new CT.slider.Slider({
+						parent: snode,
+						navButtons: false,
+						frames: p.photos.map(function(item) {
+							var photo = CT.data.get(item);
+							return {
+								img: photo.img,
+								tab: {
+									content: CT.dom.div(photo.caption, "big p10"),
+									origin: "bottom"
+								}
+							};
+						})
+					});
+				});
+				return pnode;
+			}
 		}
 	},
 	edit: function(p, pnode, tlist) {

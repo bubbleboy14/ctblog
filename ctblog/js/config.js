@@ -20,6 +20,7 @@
 		}
 	},
 	"blog": {
+		"photoset_embed": false,
 		"blurs": {
 			"comment": ["Comment"]
 		}
