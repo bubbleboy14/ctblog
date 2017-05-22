@@ -13,6 +13,7 @@
 		"mode": "post",
 		"poster": null,
 		"blurb": true,
+		"tabbed": false,
 		"blurs": {
 			"title": ["Title"],
 			"blurb": ["Blurb"],
