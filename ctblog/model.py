@@ -5,6 +5,7 @@ class BasePost(db.TimeStampedBase):
 	live = db.Boolean(default=False)
 	title = db.String()
 	blurb = db.String()
+	tags = db.String(repeated=True)
 
 class Post(BasePost):
 	img = db.Binary()	

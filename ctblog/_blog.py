@@ -21,6 +21,7 @@ def response():
 	else:
 		blurb = cgi_get("blurb", required=False)
 		pkey = cgi_get("key", required=False)
+		tags = cgi_get("tags", required=False)
 		pmod = db.get_model(action)
 		if pkey:
 			ent = pmod.query(pmod.key == pkey).get()
@@ -30,6 +31,8 @@ def response():
 		ent.live = cgi_get("live")
 		if blurb:
 			ent.blurb = blurb
+		if tags:
+			ent.tags = tags
 		if action == "post":
 			ent.body = cgi_get("body")
 	ent.put()

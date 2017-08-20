@@ -195,31 +195,45 @@ blog.core.util = {
 				pdata.blurb = blurb.value;
 			if (tmode)
 				pdata.body = body.value;
-			CT.net.post("/_blog", CT.merge({
-				action: cfg.mode,
-				key: p.key
-			}, pdata), null, function(key) {
-				var d = CT.data.get(key);
-				if (!d) {
-					d = pdata;
-					d.key = key;
-					d.label = d.title;
-					if (cfg.mode == "photoset")
-						d.photos = [];
-					CT.data.add(d);
-					var t = CT.panel.trigger(d, function(d) { blog.core.util.edit(d, pnode, tlist); });
-					if (tlist.firstChild.nextSibling)
-						tlist.insertBefore(t, tlist.firstChild.nextSibling);
-					else
-						tlist.appendChild(t);
-					t.trigger();
-				} else {
-					for (var pd in pdata)
-						p[pd] = pdata[pd];
-					if (p.title != p.label)
-						p.node.rename(p.title);
-				}
-			});
+			var doSubmit = function() {
+				CT.net.post("/_blog", CT.merge({
+					action: cfg.mode,
+					key: p.key
+				}, pdata), null, function(key) {
+					var d = CT.data.get(key);
+					if (!d) {
+						d = pdata;
+						d.key = key;
+						d.label = d.title;
+						if (cfg.mode == "photoset")
+							d.photos = [];
+						CT.data.add(d);
+						var t = CT.panel.trigger(d, function(d) { blog.core.util.edit(d, pnode, tlist); });
+						if (tlist.firstChild.nextSibling)
+							tlist.insertBefore(t, tlist.firstChild.nextSibling);
+						else
+							tlist.appendChild(t);
+						t.trigger();
+					} else {
+						for (var pd in pdata)
+							p[pd] = pdata[pd];
+						if (p.title != p.label)
+							p.node.rename(p.title);
+					}
+				});
+			};
+			if (cfg.tags && cfg.tags.length) {
+				(new CT.modal.Prompt({
+					style: "multiple-choice",
+					prompt: "tag your post",
+					data: cfg.tags,
+					cb: function(choices) {
+						pdata.tags = choices;
+						doSubmit();
+					}
+				})).show();
+			} else
+				doSubmit();
 		}));
 		CT.dom.setContent(pnode, CT.dom.div(cnodes, "bordered padded round"));
 	},

@@ -14,6 +14,7 @@
 		"poster": null,
 		"blurb": true,
 		"tabbed": false,
+		"tags": [],
 		"blurs": {
 			"title": ["Title"],
 			"blurb": ["Blurb"],
