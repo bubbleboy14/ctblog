@@ -6,7 +6,7 @@ blog.core.db = {
 		filters = filters || {};
 		if (live)
 			filters.live = true;
-		if (myposts)
+		if (myposts && blog.core.util._user)
 			filters.user = blog.core.util._user.key;
 		return CT.db.get(core.config.ctblog.post.mode, cb, limit, offset, order, filters, sync);
 	},
