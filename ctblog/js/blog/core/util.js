@@ -50,7 +50,7 @@ blog.core.util = {
 				CT.dom.div(p.blurb, "gray italic blockquote"),
 				CT.dom.div(p.body.split("\n").map(function(sec) {
 					return sec || CT.dom.br();
-				}), "padded"),
+				}), "ctblog_body padded"),
 				cnode
 			], "bordered padded round");
 		} else if (cfg.post.mode == "videopost") {
