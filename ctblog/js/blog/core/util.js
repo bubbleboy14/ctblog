@@ -224,6 +224,7 @@ blog.core.util = {
 			};
 			if (cfg.tags && cfg.tags.length) {
 				(new CT.modal.Prompt({
+					className: cfg.taggerClass || "basicpopup mosthigh", // backwards compatibility...
 					style: "multiple-choice",
 					prompt: "tag your post",
 					data: cfg.tags,

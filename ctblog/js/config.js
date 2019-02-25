@@ -15,6 +15,7 @@
 		"blurb": true,
 		"tabbed": false,
 		"tags": [],
+		"taggerClass": "basicpopup mosthigh",
 		"blurs": {
 			"title": ["Title"],
 			"blurb": ["Blurb"],
