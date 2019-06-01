@@ -2,6 +2,7 @@ CT.require("CT.all");
 CT.require("core");
 CT.require("user.core");
 CT.require("blog.core");
+CT.scriptImport(core.config.ctblog.CC.gateway);
 
 var setSlide = function(collection, frameCb) {
 	var slider = new CT.slider.Slider({
@@ -45,11 +46,11 @@ CT.onload(function() {
 				});
 			});
 			setSlide(Object.values(categories), function(cat) {
-				return cat.posts.map(blog.core.util.post);
+				return cat.posts.map(blog.core.util.viewable);
 			});
 		} else if (cfg.tabbed)
-			setSlide(posts, blog.core.util.post);
+			setSlide(posts, blog.core.util.viewable);
 		else
-			CT.dom.setContent("ctmain", posts.map(blog.core.util.post));
+			CT.dom.setContent("ctmain", posts.map(blog.core.util.viewable));
 	}, true);
 });

@@ -1,7 +1,11 @@
 from cantools import db
+from ctuser.model import CTUser
+
+class Author(CTUser):
+	cc = db.String() # carecoin membership key
 
 class BasePost(db.TimeStampedBase):
-	user = db.ForeignKey(kind="ctuser")
+	user = db.ForeignKey(kinds=[CTUser, Author]) # ctu for backwards compatibility
 	live = db.Boolean(default=False)
 	title = db.String()
 	blurb = db.String()
@@ -24,6 +28,6 @@ class PhotoSet(BasePost):
 	photos = db.ForeignKey(repeated=True, kind=Photo)
 
 class Comment(db.TimeStampedBase):
-	user = db.ForeignKey(kind="ctuser")
+	user = db.ForeignKey(kinds=[CTUser, Author]) # ctu for backwards compatibility
 	post = db.ForeignKey(kinds=["post", "videopost", "photoset"])
 	body = db.Text()
