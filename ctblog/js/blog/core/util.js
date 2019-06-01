@@ -6,17 +6,21 @@ blog.core.util = {
 		return blog.core.util._viewer;
 	},
 	viewable: function(p) {
-		var n = blog.core.util.post(p),
+		var n = blog.core.util.post(p), viewer,
+			ccfg = core.config.ctblog.CC,
+			memship = ccfg && ccfg.membership;
+		if (memship) {
 			viewer = blog.core.util.getViewer();
-		n.on("visible", function() {
-			CT.log("viewed: " + p.title + " " + p.key);
-			viewer.view({
-				content: {
-					membership: core.config.ctblog.CC.membership,
-					identifier: p.title + " (" + p.key + ")"
-				}
+			n.on("visible", function() {
+				CT.log("viewed: " + p.title + " " + p.key);
+				viewer.view({
+					content: {
+						membership: memship,
+						identifier: p.title + " (" + p.key + ")"
+					}
+				});
 			});
-		});
+		}
 		return n;
 	},
 	post: function(p) {
