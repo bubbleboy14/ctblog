@@ -1,4 +1,9 @@
 {
+	"CC": {
+		"gateway": "https://cc.mkult.co/comp/api.js",
+		"membership": null,
+		"agent": null
+	},
 	"index": {
 		"latest": false,
 		"slider": [],
