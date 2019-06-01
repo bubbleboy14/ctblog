@@ -1,5 +1,24 @@
 blog.core.util = {
 	_newPost: "<b>New " + core.config.ctblog.post.name + "</b>",
+	getViewer: function() {
+		if (!blog.core.util._viewer)
+			blog.core.util._viewer = CC.viewer();
+		return blog.core.util._viewer;
+	},
+	viewable: function(p) {
+		var n = blog.core.util.post(p),
+			viewer = blog.core.util.getViewer();
+		n.on("visible", function() {
+			CT.log("viewed: " + p.title + " " + p.key);
+			viewer.view({
+				content: {
+					membership: core.config.ctblog.CC.membership,
+					identifier: p.title + " (" + p.key + ")"
+				}
+			});
+		});
+		return n;
+	},
 	post: function(p) {
 		var cnode = CT.dom.node(), unode = CT.dom.div(null, "right"),
 			cfg = core.config.ctblog;
