@@ -2,7 +2,7 @@ from cantools import db
 from ctuser.model import CTUser
 
 class Author(CTUser):
-	cc = db.String() # carecoin membership key
+	cc = db.JSON() # carecoin {person,membership}
 
 class BasePost(db.TimeStampedBase):
 	user = db.ForeignKey(kinds=[CTUser, Author]) # ctu for backwards compatibility
