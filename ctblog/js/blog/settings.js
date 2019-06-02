@@ -4,7 +4,7 @@ blog.settings = {
 		isDiff: function(ccdude) {
 			var ccfg = user.core.get("cc"),
 				cur = ccfg && ccfg.person;
-			return (!ccdude != !cur) && (ccdude != cur);
+			return ccdude != cur;
 		},
 		shouldSwitch: function(ccdude) {
 			return blog.settings._.isDiff(ccdude) && confirm("update your associated carecoin account?");
