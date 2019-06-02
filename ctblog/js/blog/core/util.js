@@ -5,8 +5,9 @@ blog.core.util = {
 			blog.core.util._viewer = CC.viewer();
 		return blog.core.util._viewer;
 	},
-	doView: function(memship, identifier) {
+	doView: function(memship, identifier, agent) {
 		blog.core.util.getViewer().view({
+			agent: agent,
 			content: {
 				membership: memship,
 				identifier: identifier
@@ -19,7 +20,8 @@ blog.core.util = {
 			identifier = p.title + " (" + p.key + ")";
 		if (ccfg.agent && ccfg.pod) { // else no individual memberships
 			CT.db.one(p.user, function(author) {
-				blog.core.util.doView(author.cc && author.cc.membership || memship, identifier);
+				blog.core.util.doView(author.cc && author.cc.membership || memship,
+					identifier, ccfg.agent);
 			});
 		} else if (memship)
 			blog.core.util.doView(memship, identifier);
