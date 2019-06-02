@@ -45,7 +45,7 @@ blog.settings = {
 			}
 		},
 		setSwitcher: function(switchIt) {
-			var _ = blog.settings._, ccfg = core.config.ctblog.CC,
+			var _ = blog.settings._, ccfg = user.core.get("cc"),
 				p = ccfg && ccfg.person;
 			if (switchIt) {
 				CT.dom.clear(_.switcheroo);
