@@ -2,7 +2,8 @@
 	"CC": {
 		"gateway": "https://cc.mkult.co/comp/api.js",
 		"membership": null,
-		"agent": null
+		"agent": null,
+		"pod": null
 	},
 	"index": {
 		"latest": false,

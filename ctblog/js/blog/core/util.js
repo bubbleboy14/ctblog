@@ -5,22 +5,33 @@ blog.core.util = {
 			blog.core.util._viewer = CC.viewer();
 		return blog.core.util._viewer;
 	},
-	viewable: function(p) {
-		var n = blog.core.util.post(p), viewer,
-			ccfg = core.config.ctblog.CC,
-			memship = ccfg && ccfg.membership;
-		if (memship) {
-			viewer = blog.core.util.getViewer();
-			n.on("visible", function() {
-				CT.log("viewed: " + p.title + " " + p.key);
-				viewer.view({
-					content: {
-						membership: memship,
-						identifier: p.title + " (" + p.key + ")"
-					}
-				});
+	doView: function(memship, identifier, agent) {
+		blog.core.util.getViewer().view({
+			agent: agent,
+			content: {
+				membership: memship,
+				identifier: identifier
+			}
+		});
+	},
+	view: function(p) {
+		var ccfg = core.config.ctblog.CC,
+			memship = ccfg && ccfg.membership,
+			identifier = p.title + " (" + p.key + ")";
+		if (ccfg.agent && ccfg.pod) { // else no individual memberships
+			CT.db.one(p.user, function(author) {
+				blog.core.util.doView(author.cc && author.cc.membership || memship,
+					identifier, ccfg.agent);
 			});
-		}
+		} else if (memship)
+			blog.core.util.doView(memship, identifier);
+	},
+	viewable: function(p) {
+		var n = blog.core.util.post(p);
+		n.on("visible", function() {
+			CT.log("viewed: " + p.title + " " + p.key);
+			blog.core.util.view(p);
+		});
 		return n;
 	},
 	post: function(p) {
