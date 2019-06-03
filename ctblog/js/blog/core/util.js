@@ -16,15 +16,14 @@ blog.core.util = {
 	},
 	view: function(p) {
 		var ccfg = core.config.ctblog.CC,
-			memship = ccfg && ccfg.membership,
-			identifier = p.title + " (" + p.key + ")";
+			memship = ccfg && ccfg.membership;
 		if (ccfg.agent && ccfg.pod) { // else no individual memberships
 			CT.db.one(p.user, function(author) {
 				blog.core.util.doView(author.cc && author.cc.membership || memship,
-					identifier, ccfg.agent);
+					p.title, ccfg.agent);
 			});
 		} else if (memship)
-			blog.core.util.doView(memship, identifier);
+			blog.core.util.doView(memship, p.title);
 	},
 	viewable: function(p) {
 		var n = blog.core.util.post(p);
