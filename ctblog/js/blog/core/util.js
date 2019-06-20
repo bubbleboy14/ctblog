@@ -1,38 +1,5 @@
 blog.core.util = {
 	_newPost: "<b>New " + core.config.ctblog.post.name + "</b>",
-	getViewer: function() {
-		if (!blog.core.util._viewer)
-			blog.core.util._viewer = CC.viewer();
-		return blog.core.util._viewer;
-	},
-	doView: function(memship, identifier, agent) {
-		blog.core.util.getViewer().view({
-			agent: agent,
-			content: {
-				membership: memship,
-				identifier: identifier
-			}
-		});
-	},
-	view: function(p) {
-		var ccfg = core.config.ctblog.CC,
-			memship = ccfg && ccfg.membership;
-		if (ccfg.agent && ccfg.pod) { // else no individual memberships
-			CT.db.one(p.user, function(author) {
-				blog.core.util.doView(author.cc && author.cc.membership || memship,
-					p.title, ccfg.agent);
-			});
-		} else if (memship)
-			blog.core.util.doView(memship, p.title);
-	},
-	viewable: function(p) {
-		var n = blog.core.util.post(p);
-		n.on("visible", function() {
-			CT.log("viewed: " + p.title + " " + p.key);
-			blog.core.util.view(p);
-		});
-		return n;
-	},
 	post: function(p) {
 		var cnode = CT.dom.node(), unode = CT.dom.div(null, "right"),
 			cfg = core.config.ctblog;
