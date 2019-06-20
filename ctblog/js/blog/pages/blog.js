@@ -3,7 +3,9 @@ CT.require("core");
 CT.require("user.core");
 CT.require("blog.core");
 CT.require("blog.view");
-CT.scriptImport(core.config.ctblog.CC.gateway);
+var ccfg = core.config.ctblog.CC;
+if (ccfg && ccfg.gateway)
+	CT.scriptImport(ccfg.gateway);
 
 var setSlide = function(collection, frameCb) {
 	var slider = new CT.slider.Slider({
