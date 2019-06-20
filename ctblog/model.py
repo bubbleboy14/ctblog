@@ -5,7 +5,7 @@ class Author(CTUser):
 	cc = db.JSON() # carecoin {person,membership}
 
 class BasePost(db.TimeStampedBase):
-	user = db.ForeignKey(kinds=[CTUser, Author]) # ctu for backwards compatibility
+	user = db.ForeignKey() # CTUser, Author, or whatever else
 	live = db.Boolean(default=False)
 	title = db.String()
 	blurb = db.String()
@@ -28,6 +28,6 @@ class PhotoSet(BasePost):
 	photos = db.ForeignKey(repeated=True, kind=Photo)
 
 class Comment(db.TimeStampedBase):
-	user = db.ForeignKey(kinds=[CTUser, Author]) # ctu for backwards compatibility
+	user = db.ForeignKey() # CTUser, Author, or whatever else
 	post = db.ForeignKey(kinds=["post", "videopost", "photoset"])
 	body = db.Text()
