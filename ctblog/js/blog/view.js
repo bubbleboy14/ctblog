@@ -1,0 +1,52 @@
+blog.view = {
+	_: {
+		get: function() {
+			var _ = blog.view._;
+			if (!_.viewer)
+				_.viewer = CC.viewer();
+			return _.viewer;
+		},
+		emit: function(memship, identifier, agent) {
+			blog.view._.get().view({
+				agent: agent,
+				content: {
+					membership: memship,
+					identifier: identifier
+				}
+			});
+		},
+		local: function(p, a) {
+			CT.require("comp.core", true);
+			comp.core.c({
+				action: "view",
+				agent: a,
+				content: {
+					blogger: p.user,
+					identifier: p.title
+				}
+			});
+		},
+		view: function(p) {
+			var ccfg = core.config.ctblog.CC,
+				memship = ccfg && ccfg.membership,
+				_ = blog.view._;
+			if (core.config.ctcomp)
+				_.local(p, ccfg.agent);
+			else if (ccfg.agent && ccfg.pod) { // else no individual memberships
+				CT.db.one(p.user, function(author) {
+					_.emit(author.cc && author.cc.membership || memship,
+						p.title, ccfg.agent);
+				});
+			} else if (memship)
+				_.emit(memship, p.title);
+		}
+	},
+	viewable: function(p) {
+		var n = blog.core.util.post(p);
+		n.on("visible", function() {
+			CT.log("viewed: " + p.title + " " + p.key);
+			blog.view._.view(p);
+		});
+		return n;
+	}
+};
