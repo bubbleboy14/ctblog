@@ -37,6 +37,15 @@ var setSlide = function(collection, frameCb) {
 CT.onload(function() {
 	CT.initCore();
 	blog.core.db.posts(function(posts) {
+		if (!posts.length) {
+			return CT.dom.setContent("ctmain", CT.dom.div([
+				CT.dom.span("nothing yet! click"),
+				CT.dom.pad(),
+				CT.dom.link("here", null, "/blog/post.html"),
+				CT.dom.pad(),
+				CT.dom.span("to post the first article!")
+			], "centered"));
+		}
 		var cfg = core.config.ctblog.post;
 		posts.reverse();
 		if (cfg.tags && cfg.tags.length) {
