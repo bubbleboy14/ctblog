@@ -16,7 +16,7 @@ blog.view = {
 			});
 		},
 		local: function(p, a) {
-			CT.require("comp.core", true);
+			CT.require("comp.core", "skip");
 			comp.core.c({
 				action: "view",
 				agent: a,
