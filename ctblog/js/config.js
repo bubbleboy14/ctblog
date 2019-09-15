@@ -1,6 +1,6 @@
 {
 	"CC": {
-		"gateway": "https://cc.mkult.co/comp/api.js",
+		"gateway": "https://care-coin.net/comp/api.js",
 		"membership": null,
 		"agent": null,
 		"pod": null
