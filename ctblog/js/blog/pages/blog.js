@@ -3,7 +3,7 @@ CT.require("core");
 CT.require("user.core");
 CT.require("blog.core");
 CT.require("blog.view");
-var ccfg = core.config.ctblog.CC;
+var ccfg = core.config.CC;
 if (ccfg && ccfg.gateway)
 	CT.scriptImport(ccfg.gateway);
 

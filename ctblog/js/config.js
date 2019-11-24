@@ -1,10 +1,4 @@
 {
-	"CC": {
-		"gateway": "https://care-coin.net/comp/api.js",
-		"membership": null,
-		"agent": null,
-		"pod": null
-	},
 	"index": {
 		"latest": false,
 		"slider": [],
