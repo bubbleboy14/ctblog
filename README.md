@@ -5,6 +5,7 @@ This package contains a generic blog-type website.
 # Back (Init Config)
 
     copies = {
+    	".": ["cron.yaml", "cronscan.py"],
     	"html": ["index.html"],
     	"css": ["custom.css"]
     }
@@ -29,6 +30,7 @@ This package contains a generic blog-type website.
 ### Import line: 'CT.require("core.config");'
     {
     	"index": {
+    		"latest": false,
     		"slider": [],
     		"blurb": "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem"
     	},
@@ -38,9 +40,12 @@ This package contains a generic blog-type website.
     	},
     	"post": {
     		"name": "Post",
-    		"mode": "text",
+    		"mode": "post",
     		"poster": null,
     		"blurb": true,
+    		"tabbed": false,
+    		"tags": [],
+    		"taggerClass": "basicpopup mosthigh",
     		"blurs": {
     			"title": ["Title"],
     			"blurb": ["Blurb"],
@@ -48,12 +53,15 @@ This package contains a generic blog-type website.
     		}
     	},
     	"blog": {
+    		"photoset_embed": false,
     		"blurs": {
     			"comment": ["Comment"]
     		}
     	},
     	"media": {
-    		"hls": false
+    		"hls": false,
+    		"mp4": false
     	},
     	"slider_class": "abs bottom0 w1 h120p"
     }
+    
