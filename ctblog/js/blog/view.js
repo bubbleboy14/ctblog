@@ -27,7 +27,7 @@ blog.view = {
 			});
 		},
 		view: function(p) {
-			var ccfg = core.config.ctblog.CC,
+			var ccfg = core.config.CC,
 				memship = ccfg && ccfg.membership,
 				_ = blog.view._;
 			if (core.config.ctcomp)
