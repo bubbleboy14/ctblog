@@ -1,5 +1,5 @@
 copies = {
-	".": ["cron.yaml", "cronscan.py"],
+	".": ["cronscan.py"],
 	"html": ["index.html"],
 	"css": ["custom.css"]
 }
