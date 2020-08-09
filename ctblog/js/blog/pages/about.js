@@ -5,11 +5,12 @@ CT.require("blog.core");
 
 CT.onload(function() {
 	CT.initCore();
-	if (core.config.ctblog.about.blurb)
+	var cfg = core.config.ctblog.about;
+	if (cfg.blurb)
 		CT.dom.setContent("ctmain",
-			CT.dom.node(core.config.ctblog.about.blurb,
+			CT.dom.node(cfg.blurb,
 				"div", "blockquote"));
-	if (core.config.ctblog.about.slider.length) {
+	if (cfg.slider.length) {
 		var snode = CT.dom.node(null, null, core.config.ctblog.slider_class);
 		CT.dom.addContent(document.body, snode);
 		document.body.classList.add("footered");
@@ -17,7 +18,9 @@ CT.onload(function() {
 			parent: snode,
 			navButtons: false,
 			panDuration: 10000,
-			frames: core.config.ctblog.about.slider
+			frames: cfg.slider
 		});
 	}
+	if (cfg.extra)
+		CT.dom.addContent("ctmain", cfg.extra());
 });
