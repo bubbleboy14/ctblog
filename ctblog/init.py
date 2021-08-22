@@ -1,3 +1,4 @@
+dirs = ["md"]
 copies = {
 	".": ["cronscan.py"],
 	"html": ["index.html"],
@@ -13,6 +14,7 @@ model = {
 	"ctblog.model": ["*"]
 }
 routes = {
+	"/md": "md",
 	"/_blog": "_blog.py",
 	"/_vproc": "_vproc.py"
 }
