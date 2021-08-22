@@ -5,3 +5,11 @@
 /*#ctmain>div:first-child>div {
 	padding: 10px;
 }*/
+
+#mdbody img {
+	max-width: 100%;
+}
+
+#mdbody .blockquote {
+	color: gray;
+}
