@@ -6,6 +6,10 @@
 	padding: 10px;
 }*/
 
+#mdbody #ctmain {
+	padding: 10px;
+}
+
 #mdbody img {
 	max-width: 100%;
 }
