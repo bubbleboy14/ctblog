@@ -1,4 +1,5 @@
 CT.require("CT.all");
+CT.require("core");
 CT.scriptImport("https://cdn.jsdelivr.net/npm/marked/marked.min.js");
 
 var proc = function(text) {
@@ -7,6 +8,7 @@ var proc = function(text) {
 };
 
 CT.onload(function() {
+	CT.initCore();
 	var h = location.hash.slice(1);
 	fetch("/md/" + h + ".md").then(d => d.text()).then(function(text) {
 		if (text.startsWith("<b>404</b>"))
