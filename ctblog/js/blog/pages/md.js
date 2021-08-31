@@ -7,6 +7,10 @@ var proc = function(text) {
 		"<div class='big blockquote'>").replace(/\n"""\n\n/g, "</div>"));
 };
 
+var ytFix = function(iframe) {
+	iframe.parentNode.className = "vidbox";
+};
+
 CT.onload(function() {
 	CT.initCore();
 	CT.parse.enableVideo();
@@ -14,7 +18,9 @@ CT.onload(function() {
 	fetch("/md/" + h + ".md").then(d => d.text()).then(function(text) {
 		if (text.startsWith("<b>404</b>"))
 			CT.dom.setMain(CT.dom.div("can't find it!", "centered"));
-		else
+		else {
 			CT.dom.setMain(CT.parse.process(proc(text)));
+			CT.dom.tag("iframe").forEach(ytFix);
+		}
 	});
 });

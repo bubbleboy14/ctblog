@@ -17,3 +17,15 @@
 #mdbody .blockquote {
 	color: gray;
 }
+
+#mdbody p a.vidbox iframe { /* yt vid... */
+    position: absolute;
+    height: 100%;
+    top: 0;
+}
+
+#mdbody p a.vidbox { /* yt vid wrapper */
+    display: block;
+    position: relative;
+    padding-top: 42%;
+}
