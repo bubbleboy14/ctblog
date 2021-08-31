@@ -9,6 +9,7 @@ var proc = function(text) {
 
 CT.onload(function() {
 	CT.initCore();
+	CT.parse.enableVideo():
 	var h = location.hash.slice(1);
 	fetch("/md/" + h + ".md").then(d => d.text()).then(function(text) {
 		if (text.startsWith("<b>404</b>"))
