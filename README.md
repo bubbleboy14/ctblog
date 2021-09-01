@@ -4,8 +4,9 @@ This package contains a generic blog-type website.
 
 # Back (Init Config)
 
+    dirs = ["md"]
     copies = {
-    	".": ["cron.yaml", "cronscan.py"],
+    	".": ["cronscan.py"],
     	"html": ["index.html"],
     	"css": ["custom.css"]
     }
@@ -19,16 +20,22 @@ This package contains a generic blog-type website.
     	"ctblog.model": ["*"]
     }
     routes = {
+    	"/md": "md",
     	"/_blog": "_blog.py",
     	"/_vproc": "_vproc.py"
     }
     requires = ["ctuser"]
+    
 
 # Front (JS Config)
 
 ## core.config.ctblog
 ### Import line: 'CT.require("core.config");'
     {
+    	"md": {
+    		"poetry": false,
+    		"video": true
+    	},
     	"index": {
     		"latest": false,
     		"slider": [],
