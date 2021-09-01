@@ -1,4 +1,8 @@
 {
+	"md": {
+		"poetry": false,
+		"video": true
+	},
 	"index": {
 		"latest": false,
 		"slider": [],
