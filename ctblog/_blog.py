@@ -1,3 +1,4 @@
+import os
 from cantools.web import respond, succeed, fail, cgi_get, clearmem
 from cantools import config
 from model import db, Comment, Photo
@@ -5,7 +6,10 @@ from model import db, Comment, Photo
 def response():
 	if config.memcache.db:
 		clearmem()
-	action = cgi_get("action", choices=["post", "videopost", "comment", "photo", "photoset"])
+	action = cgi_get("action", choices=["post", "videopost", "comment", "photo", "photoset", "md"])
+	if action == "md":
+		for dn, dz, fz in os.walk("md"):
+			succeed([f[:-3] for f in fz])
 	user = cgi_get("user")
 	if action == "comment":
 		ent = Comment(user=user, post=cgi_get("post"), body=cgi_get("body"))
