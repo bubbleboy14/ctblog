@@ -16,7 +16,7 @@ var poetrize = function(text) {
 var proc = function(text) {
 	if (cfg.poetry)
 		text = poetrize(text);
-	return marked(text.replace(/\n\n"""\n/g,
+	return marked.marked(text.replace(/\n\n"""\n/g,
 		"<div class='big blockquote'>").replace(/\n"""\n\n/g, "</div>"));
 };
 
