@@ -12,16 +12,24 @@ var poLine = function(line) {
 var poetrize = function(text) {
 	return text.split("\n").map(poLine).join("\n").slice(0, -1);
 };
-
 var proc = function(text) {
 	if (cfg.poetry)
 		text = poetrize(text);
 	return marked.marked(text.replace(/\n\n"""\n/g,
-		"<div class='big blockquote'>").replace(/\n"""\n\n/g, "</div>"));
+		"<div class='big blockquote'>").replace(/\n"""\n\n/g, "</div>").replace(/\n\n'''\n/g,
+		"<div class='big blockquote hmaxtrans hm0'>").replace(/\n'''\n\n/g, "</div>"));
 };
 
 var ytFix = function(iframe) {
 	iframe.parentNode.className = "vidbox";
+};
+var expando = function(e) {
+	var expander = CT.dom.link("click here to expand", function() {
+		var xed = expander._expanded = !expander._expanded;
+		e.classList[xed ? "add" : "remove"]("hminit");
+		CT.dom.setContent(expander, "click here to " + (xed ? "contract" : "expand"));
+	});
+	e.parentNode.insertBefore(expander, e);
 };
 
 CT.onload(function() {
@@ -34,6 +42,7 @@ CT.onload(function() {
 		else {
 			CT.dom.setMain(CT.parse.process(proc(text)));
 			CT.dom.tag("iframe").forEach(ytFix);
+			CT.dom.className("hmaxtrans").forEach(expando);
 		}
 	});
 });
