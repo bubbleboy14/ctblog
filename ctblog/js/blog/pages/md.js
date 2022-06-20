@@ -17,7 +17,7 @@ var proc = function(text) {
 		text = poetrize(text);
 	return marked.marked(text.replace(/\n\n"""\n/g,
 		"<div class='big blockquote'>").replace(/\n"""\n\n/g, "</div>").replace(/\n\n'''\n/g,
-		"<div class='big blockquote bottommargined noflow hmaxtrans hm0'>").replace(/\n'''\n\n/g, "</div>"));
+		"<div class='big blockquote bottommargined up30 noflow hoverglow hmaxtrans hm0'>").replace(/\n'''\n\n/g, "</div>"));
 };
 
 var ytFix = function(iframe) {
@@ -28,7 +28,7 @@ var expando = function(e) {
 		var xed = expander._expanded = !expander._expanded;
 		e.classList[xed ? "add" : "remove"]("hmaxmax");
 		CT.dom.setContent(expander, "click here to " + (xed ? "contract" : "expand"));
-	});
+	}, null, "bigger block hoverglow centered");
 	e.parentNode.insertBefore(expander, e);
 };
 
