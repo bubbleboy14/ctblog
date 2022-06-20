@@ -40,7 +40,10 @@ var buildChart = function(n) {
 		labels: lz.split(", "),
 		series: rz.split("</p>  <p> ").map(r => r.split(", ").map(i => parseInt(i)))
 	}, {
-		fullWidth: true
+		fullWidth: true,
+		chartPadding: {
+			right: 40
+		}
 	});
 };
 var charts = function() {
