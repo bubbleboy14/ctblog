@@ -17,7 +17,8 @@ var proc = function(text) {
 		text = poetrize(text);
 	return marked.marked(text.replace(/\n\n"""\n/g,
 		"<div class='big blockquote'>").replace(/\n"""\n\n/g, "</div>").replace(/\n\n'''\n/g,
-		"<div class='big blockquote bottommargined up30 noflow hoverglow hmaxtrans hm0'>").replace(/\n'''\n\n/g, "</div>"));
+		"<div class='big blockquote bottommargined up30 noflow hoverglow hmaxtrans hm0'>").replace(/\n'''\n\n/g,
+		"</div>").replace(/\n\n;;;\n/g, "<div class='mdchart'>").replace(/\n;;;\n\n/g, "</div>"));
 };
 
 var ytFix = function(iframe) {
@@ -31,6 +32,25 @@ var expando = function(e) {
 	}, null, "bigger block hoverglow centered");
 	e.parentNode.insertBefore(expander, e);
 };
+var buildChart = function(n) {
+	var d = n.innerHTML, lz, rz;
+	[lz, rz] = d.slice(1, -4).split("<p></p>  <p> ");
+	n.innerHTML = "";
+	new Chartist.Line(n, {
+		labels: lz.split(", "),
+		series: rz.split("</p>  <p> ").map(r => r.split(", ").map(i => parseInt(i)))
+	}, {
+		fullWidth: true
+	});
+};
+var charts = function() {
+	var cz = CT.dom.className("mdchart");
+	if (!cz.length) return;
+	CT.dom.addStyle(null, "https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css");
+	CT.scriptImport("https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js", function() {
+		cz.forEach(buildChart);
+	});
+};
 
 CT.onload(function() {
 	CT.initCore();
@@ -43,6 +63,7 @@ CT.onload(function() {
 			CT.dom.setMain(CT.parse.process(proc(text)));
 			CT.dom.tag("iframe").forEach(ytFix);
 			CT.dom.className("hmaxtrans").forEach(expando);
+			charts();
 		}
 	});
 });
