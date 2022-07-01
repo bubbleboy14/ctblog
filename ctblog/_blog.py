@@ -1,4 +1,4 @@
-import os
+import os, random
 from cantools.web import respond, succeed, fail, cgi_get, clearmem
 from cantools import config
 from model import db, Comment, Photo
@@ -6,7 +6,10 @@ from model import db, Comment, Photo
 def response():
 	if config.memcache.db:
 		clearmem()
-	action = cgi_get("action", choices=["post", "videopost", "comment", "photo", "photoset", "md"])
+	action = cgi_get("action", choices=["post", "videopost", "comment", "photo", "photoset", "md", "ranvid"])
+	if action == "ranvid":
+		for dn, dz, fz in os.walk("v"):
+			succeed("/v/%s"%(random.choice(fz),))
 	if action == "md":
 		for dn, dz, fz in os.walk("md"):
 			succeed([f[:-3] for f in fz])
