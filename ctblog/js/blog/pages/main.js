@@ -12,6 +12,7 @@ CT.onload(function() {
 	var cfg = core.config.ctblog.index;
 	cfg.onload && cfg.onload();
 	cfg.latest && blog.core.util.latest();
+	cfg.ranvid && blog.core.util.ranvid();
 	cfg.blurb && CT.dom.setMain(CT.dom.div(cfg.blurb, cfg.blurbClass || "blockquote"));
 	cfg.md && CT.net.post({
 		path: "/_blog",
