@@ -1,5 +1,6 @@
 import os, random
 from cantools.web import respond, succeed, fail, cgi_get, clearmem
+from cantools.util import log
 from cantools import config
 from model import db, Comment, Photo
 
@@ -9,7 +10,9 @@ def response():
 	action = cgi_get("action", choices=["post", "videopost", "comment", "photo", "photoset", "md", "ranvid"])
 	if action == "ranvid":
 		for dn, dz, fz in os.walk("v"):
-			succeed("/v/%s"%(random.choice(fz),))
+			vpath = "/v/%s"%(random.choice(fz),)
+			log("ranvid: %s"%(vpath,))
+			succeed(vpath)
 	if action == "md":
 		for dn, dz, fz in os.walk("md"):
 			succeed([f[:-3] for f in fz])
