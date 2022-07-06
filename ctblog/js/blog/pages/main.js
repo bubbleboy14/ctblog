@@ -2,6 +2,7 @@ CT.require("CT.all");
 CT.require("core");
 CT.require("user.core");
 CT.require("blog.core");
+CT.require("blog.ranvid");
 
 var mdnode = function(md) {
 	return CT.dom.link(md, null, "/blog/md.html#" + md, "big block");
@@ -12,7 +13,7 @@ CT.onload(function() {
 	var cfg = core.config.ctblog.index;
 	cfg.onload && cfg.onload();
 	cfg.latest && blog.core.util.latest();
-	cfg.ranvid && blog.core.util.ranvid();
+	cfg.ranvid && blog.ranvid.init();
 	cfg.blurb && CT.dom.setMain(CT.dom.div(cfg.blurb, cfg.blurbClass || "blockquote"));
 	cfg.md && CT.net.post({
 		path: "/_blog",
