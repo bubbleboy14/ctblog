@@ -263,29 +263,6 @@ blog.core.util = {
 			else if (cfg.post.mode == "photoset")
 				blog.core.media.photo.set(d[0]);
 		});
-	},
-	ranvid: function() {
-		var stat = CT.dom.img(core.config.ctblog.index.ranvid, "abs full mosthigh");
-		CT.dom.setMain(stat);
-		CT.net.post({
-			path: "/_blog",
-			params: {
-				action: "ranvid"
-			},
-			cb: function(v) {
-				var vid = CT.dom.video({
-					src: v,
-					autoplay: true,
-					className: "full",
-					onended: blog.core.util.ranvid,
-					onplay: () => CT.dom.remove(stat)
-				});
-				stat.onclick = function() {
-					vid.paused && vid.play();
-				};
-				CT.dom.addContent("ctmain", vid);
-			}
-		});
 	}
 };
 blog.core.util._user = user.core.get();
