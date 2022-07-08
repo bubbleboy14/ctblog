@@ -1,4 +1,4 @@
-var rcfg = core.config.ctblog.index.ranvid;
+var rcfg = core.config.ctblog.index.ranvid || {};
 
 blog.ranvid = {
 	_: {
