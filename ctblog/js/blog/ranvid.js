@@ -29,8 +29,12 @@ blog.ranvid = {
 		CT.dom.addContent("ctmain", _.vid);
 	},
 	randize: function() {
-		var _ = blog.ranvid._;
+		var _ = blog.ranvid._, h = location.hash.slice(1);
 		CT.dom.setMain(_.stat);
+		if (h) {
+			location.hash = "";
+			return blog.ranvid.set("/v/" + h + ".mp4");
+		}
 		CT.net.post({
 			path: "/_blog",
 			params: {
