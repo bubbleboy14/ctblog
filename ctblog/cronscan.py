@@ -7,13 +7,17 @@ from model import *
 
 class Moover(object):
 	def __init__(self):
+		self.log("init")
 		self.checked = set()
 		if config.moov.initchecked:
 			for dn, dz, fz in os.walk("v"):
-				log("initializing 'checked' status of %s videos"%(len(fz),))
+				self.log("initializing 'checked' status of %s videos"%(len(fz),))
 				for f in fz:
 					self.checked.add(f)
 			return
+
+	def log(self, msg):
+		log("Moover: %s"%(msg,))
 
 	def check(self, fname):
 		fpath = "v/%s"%(fname,)
@@ -22,7 +26,7 @@ class Moover(object):
 
 	def __call__(self):
 		for dn, dz, fz in os.walk("v"):
-			log("Moover scanning %s video files (%s already checked)"%(len(fz), len(self.checked)))
+			self.log("Moover scanning %s video files (%s already checked)"%(len(fz), len(self.checked)))
 			for f in fz:
 				if f not in self.checked:
 					self.check(f)
