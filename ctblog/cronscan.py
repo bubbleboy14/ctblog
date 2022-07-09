@@ -8,6 +8,10 @@ from model import *
 class Moover(object):
 	def __init__(self):
 		self.checked = set()
+		if config.moov.initchecked:
+			for dn, dz, fz in os.walk("v"):
+				for f in fz:
+					self.checked.add(f)
 
 	def check(self, fname):
 		fpath = "v/%s"%(fname,)
