@@ -10,6 +10,7 @@ class Moover(object):
 		self.checked = set()
 		if config.moov.initchecked:
 			for dn, dz, fz in os.walk("v"):
+				log("initializing 'checked' status of %s videos"%(len(fz),))
 				for f in fz:
 					self.checked.add(f)
 			return
