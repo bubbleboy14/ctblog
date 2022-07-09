@@ -12,6 +12,7 @@ class Moover(object):
 			for dn, dz, fz in os.walk("v"):
 				for f in fz:
 					self.checked.add(f)
+			return
 
 	def check(self, fname):
 		fpath = "v/%s"%(fname,)
