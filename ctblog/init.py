@@ -19,4 +19,14 @@ routes = {
 	"/_blog": "_blog.py",
 	"/_vproc": "_vproc.py"
 }
+cfg = {
+	"video": {
+		"autoexpire": False,
+		"autohls": False,
+		"moov": {
+			"transcode": False,
+			"initchecked": False
+		}
+	}
+}
 requires = ["ctuser"]

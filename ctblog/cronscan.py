@@ -5,11 +5,13 @@ from cantools.util import log, output, transcode, shouldMoveMoov, hlsify
 from cantools import config
 from model import *
 
+bvcfg = config.ctblog.video
+
 class Moover(object):
 	def __init__(self):
 		self.log("init")
 		self.checked = set()
-		if config.moov.initchecked:
+		if bvcfg.moov.initchecked:
 			for dn, dz, fz in os.walk("v"):
 				self.log("initializing 'checked' status of %s videos"%(len(fz),))
 				for f in fz:
@@ -36,21 +38,21 @@ moover = Moover()
 
 def response():
 	log("initiating cronscan", important=True)
-	if config.autoexpire: # in days
+	if bvcfg.autoexpire: # in days
 		log("checking for expired VideoPosts", 1)
 		n = datetime.now()
-		cutoff = n - timedelta(int(config.autoexpire))
+		cutoff = n - timedelta(int(bvcfg.autoexpire))
 		expired = VideoPost.query(VideoPost.modified < cutoff).all()
 		log("deactivating %s expired VideoPosts"%(len(expired),), 2)
 		for vp in expired:
 			vp.live = False
 		db.put_multi(expired)
-	if config.autohls:
+	if bvcfg.autohls:
 		vz = VideoPost.query().all()
 		log("scanning %s VideoPosts for missing hls files"%(len(vz),), 1)
 		for v in vz:
 			hlsify(v.video.urlsafe()[1:])
-	if config.moov:
+	if bvcfg.moov.transcode:
 		moover()
 	log("cronscan complete")
 
