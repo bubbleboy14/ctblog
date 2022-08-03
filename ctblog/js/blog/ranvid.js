@@ -2,6 +2,7 @@ var rcfg = core.config.ctblog.index.ranvid || {};
 
 blog.ranvid = {
 	_: {
+		playlist: [],
 		stat: CT.dom.img(rcfg.static, "abs full mosthigh"),
 		glit: CT.dom.img(rcfg.glitch, "abs full mosthigh")
 	},
@@ -33,8 +34,10 @@ blog.ranvid = {
 		CT.dom.setMain(_.stat);
 		if (h) {
 			location.hash = "";
-			return blog.ranvid.set("/v/" + h + ".mp4");
+			_.playlist = _.playlist.concat(h.split("~"));
 		}
+		if (_.playlist.length)
+			return blog.ranvid.set("/v/" + _.playlist.shift() + ".mp4");
 		CT.net.post({
 			path: "/_blog",
 			params: {
