@@ -9,8 +9,10 @@ def response():
 		clearmem()
 	action = cgi_get("action", choices=["post", "videopost", "comment", "photo", "photoset", "md", "ranvid"])
 	if action == "ranvid":
-		for dn, dz, fz in os.walk("v"):
-			vpath = "/v/%s"%(random.choice(fz),)
+		channel = cgi_get("channel", required=False, shield=True)
+		p = channel and "v/%s"%(channel,) or "v"
+		for dn, dz, fz in os.walk(p):
+			vpath = "/%s/%s"%(p, random.choice(fz))
 			log("ranvid: %s"%(vpath,))
 			succeed(vpath)
 	if action == "md":
