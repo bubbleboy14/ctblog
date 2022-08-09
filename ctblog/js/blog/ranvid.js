@@ -3,6 +3,7 @@ var rcfg = core.config.ctblog.index.ranvid || {};
 blog.ranvid = {
 	_: {
 		playlist: [],
+		channel: null,
 		stat: CT.dom.img(rcfg.static, "abs full mosthigh"),
 		glit: CT.dom.img(rcfg.glitch, "abs full mosthigh")
 	},
@@ -30,24 +31,28 @@ blog.ranvid = {
 		CT.dom.addContent("ctmain", _.vid);
 	},
 	randize: function() {
-		var _ = blog.ranvid._, h = location.hash.slice(1);
+		var _ = blog.ranvid._;
 		CT.dom.setMain(_.stat);
-		if (h) {
-			location.hash = "";
-			_.playlist = _.playlist.concat(h.split("~"));
-		}
 		if (_.playlist.length)
 			return blog.ranvid.set("/v/" + _.playlist.shift() + ".mp4");
 		CT.net.post({
 			path: "/_blog",
 			params: {
-				action: "ranvid"
+				action: "ranvid",
+				channel: _.channel
 			},
 			cb: blog.ranvid.set
 		});
 	},
 	init: function() {
-		var _ = blog.ranvid._;
+		var _ = blog.ranvid._, h = location.hash.slice(1);
+		if (h) {
+			location.hash = "";
+			if (h.startsWith("~"))
+				_.channel = h.slice(1);
+			else
+				_.playlist = _.playlist.concat(h.split("~"));
+		}
 		_.vid = CT.dom.video({
 			autoplay: true,
 			className: "full",
