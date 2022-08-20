@@ -12,14 +12,14 @@ var vid = function(v) {
 	}));
 };
 var refill = function(num) {
-	num = num || 4;
+	num = num || 6;
 	for (var i = 0; i < num; i++)
 		blog.ranvid.get(vid);
 };
 
 CT.onload(function() {
 	CT.initCore();
-	refill(8);
+	refill(12);
 	CT.dom.setMain([
 		vidz,
 		CT.dom.div({
