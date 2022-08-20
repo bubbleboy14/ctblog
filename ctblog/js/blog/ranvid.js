@@ -30,19 +30,22 @@ blog.ranvid = {
 		};
 		CT.dom.addContent("ctmain", _.vid);
 	},
+	get: function(cb) {
+		CT.net.post({
+			path: "/_blog",
+			params: {
+				action: "ranvid",
+				channel: blog.ranvid._.channel
+			},
+			cb: cb || blog.ranvid.set
+		});
+	},
 	randize: function() {
 		var _ = blog.ranvid._;
 		CT.dom.setMain(_.stat);
 		if (_.playlist.length)
 			return blog.ranvid.set("/v/" + _.playlist.shift() + ".mp4");
-		CT.net.post({
-			path: "/_blog",
-			params: {
-				action: "ranvid",
-				channel: _.channel
-			},
-			cb: blog.ranvid.set
-		});
+		blog.ranvid.get();
 	},
 	init: function() {
 		var _ = blog.ranvid._, h = location.hash.slice(1);
