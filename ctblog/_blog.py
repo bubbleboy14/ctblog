@@ -7,7 +7,10 @@ from model import db, Comment, Photo
 def response():
 	if config.memcache.db:
 		clearmem()
-	action = cgi_get("action", choices=["post", "videopost", "comment", "photo", "photoset", "md", "ranvid"])
+	action = cgi_get("action", choices=["post", "videopost", "comment", "photo", "photoset", "md", "ranvid", "imgz"])
+	if action == "imgz":
+		succeed(random.choices(list(filter(lambda i : i.endswith(".jpg"),
+			os.listdir(os.path.join("img", "z")))), k=cgi_get("count", default=20)))
 	if action == "ranvid":
 		channel = cgi_get("channel", required=False, shield=True)
 		p = channel and "v/%s"%(channel,) or "v"
