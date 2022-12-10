@@ -1,7 +1,7 @@
 blog.core.media = {
 	item: function(p, opts) {
 		if (p.key) {
-			var mode = core.config.ctblog.post.mode;
+			var mode = p.modelName;
 			if (mode == "photoset") {
 				var pnode = CT.dom.div();
 				blog.core.media.photo.set(p, pnode);
