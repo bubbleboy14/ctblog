@@ -133,16 +133,17 @@ blog.core.util = {
 			tmode = p.modelName == "post";
 		if (p.label == blog.core.util._newPost)
 			return CT.db.withSchema(function(schema) {
+				var launchNew = function(variety) {
+					blog.core.util.edit(CT.db.edit.getDefaults(variety, null, null, true), pnode, tlist);
+				};
 				if (cfg.mode == "basepost") {
 					CT.modal.choice({
 						prompt: "what kind of post is this?",
 						data: ["post", "videopost", "photoset"],
-						cb: function(variety) {
-							blog.core.util.edit(CT.db.edit.getDefaults(variety), pnode, tlist);
-						}
+						cb: launchNew
 					});
 				} else
-					blog.core.util.edit(CT.db.edit.getDefaults(cfg.mode), pnode, tlist);
+					launchNew(cfg.mode);
 			});
 		var title = CT.dom.smartField({ blurs: blurs.title, value: p.title, classname: "w1" }),
 			blurb = CT.dom.smartField({ blurs: blurs.blurb, value: p.blurb, classname: "w1 h100p", isTA: true }),
