@@ -2,7 +2,7 @@ blog.core.util = {
 	_newPost: "<b>New " + core.config.ctblog.post.name + "</b>",
 	post: function(p) {
 		var cnode = CT.dom.node(), unode = CT.dom.div(null, "right"),
-			cfg = core.config.ctblog;
+			cfg = core.config.ctblog, mode = p.modelName;
 		blog.core.db.comments(function(comments) {
 			var required = comments.map(function(c) {
 				return c.user;
@@ -42,7 +42,7 @@ blog.core.util = {
 				CT.dom.setContent(cnode, content);
 			});
 		}, p);
-		if (cfg.post.mode == "post") {
+		if (mode == "post") {
 			return CT.dom.div([
 				unode,
 				CT.dom.div(p.title, "biggest bold padded"),
@@ -53,7 +53,7 @@ blog.core.util = {
 				}), "ctblog_body padded"),
 				cnode
 			], "bordered padded round");
-		} else if (cfg.post.mode == "videopost") {
+		} else if (mode == "videopost") {
 			return CT.dom.div([
 				unode,
 				CT.dom.div(p.title, "biggest bold padded"),
@@ -61,7 +61,7 @@ blog.core.util = {
 				CT.dom.div(p.blurb, "gray italic blockquote"),
 				cnode
 			], "bordered padded round");
-		} else if (cfg.post.mode == "photoset") {
+		} else if (mode == "photoset") {
 			if (cfg.blog.photoset_embed) {
 				var bnode = CT.dom.div(null, "padded"),
 					pnode = CT.dom.div([
@@ -130,10 +130,10 @@ blog.core.util = {
 	edit: function(p, pnode, tlist) {
 		var cfg = core.config.ctblog.post,
 			blurs = cfg.blurs,
-			tmode = cfg.mode == "post";
+			tmode = p.modelName == "post";
 		if (p.label == blog.core.util._newPost)
 			return CT.db.withSchema(function(schema) {
-				blog.core.util.edit(CT.db.edit.getDefaults(cfg.mode), pnode, tlist);
+				blog.core.util.edit(CT.db.edit.getDefaults(p.modelName), pnode, tlist);
 			});
 		var title = CT.dom.smartField({ blurs: blurs.title, value: p.title, classname: "w1" }),
 			blurb = CT.dom.smartField({ blurs: blurs.blurb, value: p.blurb, classname: "w1 h100p", isTA: true }),
@@ -160,7 +160,7 @@ blog.core.util = {
 			cnodes.push(blurb);
 		if (tmode)
 			cnodes.push(body);
-		else if (p.key && cfg.mode == "videopost") {
+		else if (p.key && p.modelName == "videopost") {
 			cnodes.push([
 				CT.dom.div("Select Poster Image Below", "bigger pt10"),
 				blog.core.media.item(p, { mediaType: "img", property: "poster" })
@@ -197,7 +197,7 @@ blog.core.util = {
 				pdata.body = body.value;
 			var doSubmit = function() {
 				CT.net.post("/_blog", CT.merge({
-					action: cfg.mode,
+					action: p.modelName,
 					key: p.key
 				}, pdata), null, function(key) {
 					var d = CT.data.get(key);
@@ -205,7 +205,7 @@ blog.core.util = {
 						d = pdata;
 						d.key = key;
 						d.label = d.title;
-						if (cfg.mode == "photoset")
+						if (p.modelName == "photoset")
 							d.photos = [];
 						CT.data.add(d);
 						var t = CT.panel.trigger(d, function(d) { blog.core.util.edit(d, pnode, tlist); });
@@ -256,7 +256,7 @@ blog.core.util = {
 				emptycb && emptycb();
 			else if (hitcb)
 				hitcb(d[0]);
-			else if (cfg.post.mode == "post")
+			else if (["post", "basepost"].includes(cfg.post.mode))
 				CT.dom.setContent("ctmain", blog.core.util.post(d[0]));
 			else if (cfg.post.mode == "videopost")
 				blog.core.media.video.set(d[0], null, true);
