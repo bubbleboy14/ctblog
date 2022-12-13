@@ -246,6 +246,18 @@ blog.core.util = {
 			} else
 				doSubmit();
 		}));
+		p.key && cnodes.push(CT.dom.button("Delete", function() {
+			if (!confirm("are you sure?") || !confirm("are you really sure?"))
+				return;
+			CT.net.post("/_blog", {
+				action: "rm",
+				key: p.key,
+				user: user.core.get("key")
+			}, null, function() {
+				alert("you did it!");
+				location = location; // hacky lol
+			});
+		}, "red"));
 		CT.dom.setContent(pnode, CT.dom.div(cnodes, "bordered padded round"));
 	},
 	comment: function(c) {
