@@ -7,7 +7,7 @@ from model import db, Comment, Photo
 def response():
 	if config.memcache.db:
 		clearmem()
-	action = cgi_get("action", choices=["post", "videopost", "comment", "photo", "photoset", "md", "ranvid", "imgz"])
+	action = cgi_get("action", choices=["post", "videopost", "comment", "photo", "photoset", "md", "ranvid", "imgz", "rm"])
 	if action == "imgz":
 		succeed(random.choices(list(filter(lambda i : i.endswith(".jpg"),
 			os.listdir(os.path.join("img", "z")))), k=cgi_get("count", default=20)))
@@ -22,6 +22,14 @@ def response():
 		for dn, dz, fz in os.walk("md"):
 			succeed([f[:-3] for f in fz])
 	user = cgi_get("user")
+	if action == "rm":
+		item = db.get(cgi_get("key"))
+		if item.polytype not in ["post", "videopost", "photoset"]:
+			fail()
+		if item.user.urlsafe() != user:
+			fail()
+		item.rm()
+		succeed()
 	if action == "comment":
 		ent = Comment(user=user, post=cgi_get("post"), body=cgi_get("body"))
 	elif action == "photo":
