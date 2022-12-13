@@ -7,6 +7,8 @@ var ccfg = core.config.CC;
 if (ccfg && ccfg.gateway)
 	CT.scriptImport(ccfg.gateway);
 
+var lochash = decodeURIComponent(document.location.hash.slice(1));
+
 var setSlide = function(collection, frameCb) {
 	var slider = new CT.slider.Slider({
 		frames: collection,
@@ -30,12 +32,19 @@ var setSlide = function(collection, frameCb) {
 				}
 			})
 		},
-		startFrame: decodeURIComponent(document.location.hash.slice(1))
+		startFrame: lochash
 	});
 };
 
 CT.onload(function() {
 	CT.initCore();
+	var cfg = core.config.ctblog.post, variety;
+	if (cfg.mode == "basepost") {
+		if (["post", "videopost", "photoset"].includes(lochash)) {
+			variety = lochash;
+			lochash = null;
+		}
+	}
 	blog.core.db.posts(function(posts) {
 		if (!posts.length) {
 			return CT.dom.setContent("ctmain", CT.dom.div([
@@ -46,7 +55,6 @@ CT.onload(function() {
 				CT.dom.span("to post the first article!")
 			], "centered"));
 		}
-		var cfg = core.config.ctblog.post;
 		posts.reverse();
 		if (cfg.tags && cfg.tags.length) {
 			var categories = {};
@@ -64,5 +72,5 @@ CT.onload(function() {
 			setSlide(posts, blog.view.viewable);
 		else
 			CT.dom.setContent("ctmain", posts.map(blog.view.viewable));
-	}, true);
+	}, true, false, variety);
 });
