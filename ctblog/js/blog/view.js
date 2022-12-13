@@ -32,7 +32,7 @@ blog.view = {
 				_ = blog.view._;
 			if (core.config.ctcomp)
 				_.local(p, ccfg.agent);
-			else if (ccfg.agent && ccfg.pod) { // else no individual memberships
+			else if (ccfg && ccfg.agent && ccfg.pod) { // else no individual memberships
 				CT.db.one(p.user, function(author) {
 					_.emit(author.cc && author.cc.membership || memship,
 						p.title, ccfg.agent);
