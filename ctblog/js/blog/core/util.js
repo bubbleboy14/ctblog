@@ -62,31 +62,27 @@ blog.core.util = {
 				cnode
 			], "bordered padded round");
 		} else if (mode == "photoset") {
+			var shopho = function(photo) {
+				CT.modal.modal(CT.dom.img(photo.img, "w1"));
+			};
 			if (cfg.blog.photoset_embed) {
-				var bnode = CT.dom.div(null, "padded"),
-					pnode = CT.dom.div([
-						CT.dom.div(p.title, "bigger bold padded centered"),
-						bnode
-					]),
-					bsplit = p.blurb.split("\n"),
-					ipos = "right",
-					content = [], pnum = 0, pushPhoto = function(bottom) {
-						var photo = CT.data.get(p.photos[pnum]);
-						if (photo) {
-							content.push(CT.dom.img({
-								imgclass: "padded " + (bottom && "h200p" || ("w1-4 " + ipos)),
-								title: photo.caption,
-								src: photo.img,
-								onclick: function() {
-									(new CT.modal.Modal({
-										content: CT.dom.img(photo.img, "w1")
-									})).show();
-								}
-							}));
-							ipos = ipos == "right" ? "left" : "right";
-							pnum += 1;
-						}
-					};
+				var bnode = CT.dom.div(null, "padded"), pnode = CT.dom.div([
+					CT.dom.div(p.title, "bigger bold padded centered"),
+					bnode
+				]), bsplit = p.blurb.split("\n"), ipos = "right", content = [
+				], pnum = 0, pushPhoto = function(bottom) {
+					var photo = CT.data.get(p.photos[pnum]);
+					if (photo) {
+						content.push(CT.dom.img({
+							imgclass: "padded " + (bottom && "h200p" || ("w1-4 " + ipos)),
+							title: photo.caption,
+							src: photo.img,
+							onclick: () => shopho(photo)
+						}));
+						ipos = ipos == "right" ? "left" : "right";
+						pnum += 1;
+					}
+				};
 				CT.db.multi(p.photos, function() {
 					bsplit.forEach(function(par) {
 						if (par)
@@ -111,9 +107,12 @@ blog.core.util = {
 					new CT.slider.Slider({
 						parent: snode,
 						navButtons: false,
+						panDuration: cfg.blog.pan_duration,
 						frames: p.photos.map(function(item) {
 							var photo = CT.data.get(item);
 							return {
+								onclick: () => shopho(photo),
+								title: photo.caption,
 								img: photo.img,
 								tab: {
 									content: CT.dom.div(photo.caption, "big p10"),
