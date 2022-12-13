@@ -212,7 +212,7 @@ blog.core.util = {
 				}, pdata), null, function(key) {
 					var d = CT.data.get(key);
 					if (!d) {
-						d = pdata;
+						d = CT.merge(pdata, p);
 						d.key = key;
 						d.label = d.title;
 						if (p.modelName == "photoset")
