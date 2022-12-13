@@ -11,6 +11,12 @@ class BasePost(db.TimeStampedBase):
 	blurb = db.String()
 	tags = db.String(repeated=True)
 
+	def comments(self):
+		return Comment.query(Comment.post == self.key).all()
+
+	def beforeremove(self, session):
+		db.delete_multi(self.comments(), session)
+
 class Post(BasePost):
 	img = db.Binary()	
 	body = db.Text()
