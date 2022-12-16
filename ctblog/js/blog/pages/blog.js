@@ -48,7 +48,8 @@ CT.onload(function() {
 				comparator: "contains",
 				value: lochash
 			}
-		}
+		};
+		document.body.classList.add("blog-" + lochash);
 		lochash = null;
 	}
 	blog.core.db.posts(function(posts) {
