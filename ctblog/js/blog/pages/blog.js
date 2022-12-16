@@ -38,12 +38,18 @@ var setSlide = function(collection, frameCb) {
 
 CT.onload(function() {
 	CT.initCore();
-	var cfg = core.config.ctblog.post, variety;
-	if (cfg.mode == "basepost") {
-		if (["post", "videopost", "photoset"].includes(lochash)) {
-			variety = lochash;
-			lochash = null;
+	var cfg = core.config.ctblog.post, variety, filters;
+	if (cfg.mode == "basepost" && ["post", "videopost", "photoset"].includes(lochash)) {
+		variety = lochash;
+		lochash = null;
+	} else if (cfg.tags.includes(lochash)) {
+		filters = {
+			tags: {
+				comparator: "contains",
+				value: lochash
+			}
 		}
+		lochash = null;
 	}
 	blog.core.db.posts(function(posts) {
 		if (!posts.length) {
@@ -72,5 +78,5 @@ CT.onload(function() {
 			setSlide(posts, blog.view.viewable);
 		else
 			CT.dom.setContent("ctmain", posts.map(blog.view.viewable));
-	}, true, false, variety);
+	}, true, false, variety, filters);
 });
