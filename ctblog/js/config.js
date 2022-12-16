@@ -19,6 +19,7 @@
 		"poster": null,
 		"blurb": true,
 		"tabbed": false,
+		"clip": false,
 		"tags": [],
 		"taggerClass": "basicpopup mosthigh",
 		"blurs": {

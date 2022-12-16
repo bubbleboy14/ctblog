@@ -7,7 +7,8 @@ var ccfg = core.config.CC;
 if (ccfg && ccfg.gateway)
 	CT.scriptImport(ccfg.gateway);
 
-var lochash = decodeURIComponent(document.location.hash.slice(1));
+var lochash = decodeURIComponent(document.location.hash.slice(1)),
+	cfg = core.config.ctblog.post;
 
 var setSlide = function(collection, frameCb) {
 	var slider = new CT.slider.Slider({
@@ -18,7 +19,7 @@ var setSlide = function(collection, frameCb) {
 		arrowPosition: "bottom",
 		bubblePosition: "bottom",
 		frameCb: frameCb,
-		tab: {
+		tab: cfg.clip && {
 			origin: "topright",
 			content: CT.dom.img({
 				src: "/img/clipboard.png",
@@ -38,7 +39,7 @@ var setSlide = function(collection, frameCb) {
 
 CT.onload(function() {
 	CT.initCore();
-	var cfg = core.config.ctblog.post, variety, filters;
+	var variety, filters;
 	if (cfg.mode == "basepost" && ["post", "videopost", "photoset"].includes(lochash)) {
 		variety = lochash;
 		lochash = null;
