@@ -1,5 +1,18 @@
 blog.core.util = {
 	_newPost: "<b>New " + core.config.ctblog.post.name + "</b>",
+	searcher: function() {
+		CT.modal.prompt({
+			prompt: "what do you want?",
+			center: false,
+			slide: {
+				origin: "bottomleft"
+			},
+			cb: function(search) {
+				location = "/blog#q:" + search;
+				location.reload();
+			}
+		});
+	},
 	post: function(p) {
 		var cnode = CT.dom.node(), unode = CT.dom.div(null, "right"),
 			cfg = core.config.ctblog, mode = p.modelName;
