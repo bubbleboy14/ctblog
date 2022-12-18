@@ -9,10 +9,15 @@ class BasePost(db.TimeStampedBase):
 	live = db.Boolean(default=False)
 	title = db.String()
 	blurb = db.String()
+	searcher = db.Text()
 	tags = db.String(repeated=True)
 
 	def comments(self):
 		return Comment.query(Comment.post == self.key).all()
+
+	def beforeedit(self, edits={}, force=False):
+		if force or "title" in edits or "blurb" in edits:
+			self.searcher = "%s %s"%(edits.get("title", self.title), edits.get("blurb", self.blurb))
 
 	def beforeremove(self, session):
 		db.delete_multi(self.comments(), session)
