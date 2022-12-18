@@ -58,6 +58,7 @@ def response():
 			ent.tags = tags
 		if action == "post":
 			ent.body = cgi_get("body")
+		ent.beforeedit(force=True)
 	ent.put()
 	if action == "photo": # get photoset
 		psk = cgi_get("photoset", required=False)
