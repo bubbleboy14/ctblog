@@ -29,6 +29,7 @@
 		}
 	},
 	"blog": {
+		"searcher": true,
 		"photoset_embed": false,
 		"blurs": {
 			"comment": ["Comment"]
