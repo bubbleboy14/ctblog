@@ -3,12 +3,14 @@ CT.require("core");
 CT.require("user.core");
 CT.require("blog.core");
 CT.require("blog.view");
-var ccfg = core.config.CC;
+var cfg = core.config,
+	ccfg = cfg.CC,
+	ctbcfg = cfg.ctblog,
+	pcfg = ctbcfg.post,
+	bcfg = ctbcfg.blog,
+	lochash = decodeURIComponent(document.location.hash.slice(1));
 if (ccfg && ccfg.gateway)
 	CT.scriptImport(ccfg.gateway);
-
-var lochash = decodeURIComponent(document.location.hash.slice(1)),
-	cfg = core.config.ctblog.post;
 
 var setSlide = function(collection, frameCb) {
 	var slider = new CT.slider.Slider({
@@ -19,7 +21,7 @@ var setSlide = function(collection, frameCb) {
 		arrowPosition: "bottom",
 		bubblePosition: "bottom",
 		frameCb: frameCb,
-		tab: cfg.clip && {
+		tab: pcfg.clip && {
 			origin: "topright",
 			content: CT.dom.img({
 				src: "/img/clipboard.png",
@@ -39,32 +41,38 @@ var setSlide = function(collection, frameCb) {
 
 CT.onload(function() {
 	CT.initCore();
-	var variety, filters;
-	if (cfg.mode == "basepost" && ["post", "videopost", "photoset"].includes(lochash)) {
+	var variety, filters = {};
+	if (pcfg.mode == "basepost" && ["post", "videopost", "photoset"].includes(lochash)) {
 		variety = lochash;
 		lochash = null;
-	} else if (cfg.tags.includes(lochash)) {
-		filters = {
-			tags: {
-				comparator: "contains",
-				value: lochash
-			}
+	} else if (pcfg.tags.includes(lochash)) {
+		filters.tags = {
+			comparator: "contains",
+			value: lochash
 		};
 		document.body.classList.add("blog-" + lochash);
+		lochash = null;
+	} else if (lochash.startsWith("q:")) {
+		filters.searcher = {
+			comparator: "like",
+			value: "%" + lochash.slice(2) + "%"
+		};
 		lochash = null;
 	}
 	blog.core.db.posts(function(posts) {
 		if (!posts.length) {
-			return CT.dom.setContent("ctmain", CT.dom.div([
+			CT.dom.setMain(CT.dom.div([
 				CT.dom.span("nothing yet! click"),
 				CT.dom.pad(),
 				CT.dom.link("here", null, "/blog/post.html"),
 				CT.dom.pad(),
 				CT.dom.span("to post the first article!")
 			], "centered"));
+			bcfg.searcher && blog.core.util.searcher();
+			return;
 		}
 		posts.reverse();
-		if (cfg.tags && cfg.tags.length) {
+		if (pcfg.tags && pcfg.tags.length) {
 			var categories = {};
 			posts.forEach(function(post) {
 				post.tags.forEach(function(tag) {
@@ -76,9 +84,10 @@ CT.onload(function() {
 			setSlide(Object.values(categories), function(cat) {
 				return cat.posts.map(blog.view.viewable);
 			});
-		} else if (cfg.tabbed)
+		} else if (pcfg.tabbed)
 			setSlide(posts, blog.view.viewable);
 		else
 			CT.dom.setContent("ctmain", posts.map(blog.view.viewable));
+		bcfg.searcher && blog.core.util.searcher();
 	}, true, false, variety, filters);
 });
