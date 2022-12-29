@@ -34,7 +34,7 @@ var expando = function(e) {
 };
 var buildChart = function(n) {
 	var d = n.innerHTML, lz, rz;
-	[lz, rz] = d.slice(1, -4).split("<p></p>    <p> ");
+	[lz, rz] = d.slice(1, -4).replace(/<p><\/p>    <p> /g, "<p></p>  <p> ").split("<p></p>  <p> ");
 	n.innerHTML = "";
 	new Chartist.Line(n, {
 		labels: lz.split(", "),
