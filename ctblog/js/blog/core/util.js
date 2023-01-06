@@ -112,7 +112,7 @@ blog.core.util = {
 			} else {
 				var snode = CT.dom.div(null, "relative noflow w1 h400p"),
 					pnode = CT.dom.div([
-						CT.dom.div(p.title, "bigger bold padded centered"),
+						CT.dom.div(p.title, "ctblog_title"),
 						CT.dom.div(p.blurb.replace(/\n/g, "<br>"), "ctblog_blurb"),
 						snode
 					]);
