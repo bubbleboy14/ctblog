@@ -113,8 +113,8 @@ blog.core.util = {
 				var snode = CT.dom.div(null, "relative noflow w1 h400p"),
 					pnode = CT.dom.div([
 						CT.dom.div(p.title, "bigger bold padded centered"),
-						snode,
-						CT.dom.div(p.blurb, "padded")
+						CT.dom.div(p.blurb.replace("\n", "<br>"), "ctblog_blurb"),
+						snode
 					]);
 				CT.db.multi(p.photos, function() {
 					new CT.slider.Slider({
