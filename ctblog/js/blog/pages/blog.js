@@ -67,7 +67,7 @@ CT.onload(function() {
 				CT.dom.link("here", null, "/blog/post.html"),
 				CT.dom.pad(),
 				CT.dom.span("to post the first article!")
-			], "centered mt40"));
+			], "centered p50"));
 			bcfg.searcher && blog.core.util.searcher();
 			return;
 		}
