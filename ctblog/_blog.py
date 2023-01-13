@@ -52,6 +52,7 @@ def response():
 			ent = pmod(user=user)
 		ent.title = cgi_get("title")
 		ent.live = cgi_get("live")
+		ent.commentary = cgi_get("commentary", default=True)
 		if blurb:
 			ent.blurb = blurb
 		if tags:
