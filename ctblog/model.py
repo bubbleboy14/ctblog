@@ -11,6 +11,7 @@ class BasePost(db.TimeStampedBase):
 	blurb = db.String()
 	searcher = db.Text()
 	tags = db.String(repeated=True)
+	commentary = db.Boolean(default=True)
 
 	def comments(self):
 		return Comment.query(Comment.post == self.key).all()
