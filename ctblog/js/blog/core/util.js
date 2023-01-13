@@ -27,6 +27,7 @@ blog.core.util = {
 					CT.dom.img(poster.img, "w100 block"),
 					CT.dom.div(poster.firstName + " " + poster.lastName, "small centered")
 				], null, "/user/profile.html#" + p.key, "round block hoverglow"));
+				if (!p.commentary) return;
 				var content = [
 					CT.dom.div("Comments", "bigger bold"),
 					comments.map(blog.core.util.comment)
@@ -177,6 +178,7 @@ blog.core.util = {
 				});
 			}, "hidden"),
 			live = CT.dom.checkboxAndLabel("Go Live", p.live, null, "pointer", "right"),
+			commentary = CT.dom.checkboxAndLabel("Commentary", p.commentary, null, "pointer", "right"),
 			cnodes = [title, blog.core.media.item(p)];
 		if (cfg.blurb)
 			cnodes.push(blurb);
@@ -189,6 +191,7 @@ blog.core.util = {
 			]);
 		}
 		cnodes.push(live);
+		cnodes.push(commentary);
 		if (p.key && p.video && core.config.ctblog.media.hls) {
 			cnodes.push(vproc);
 			CT.net.post({
