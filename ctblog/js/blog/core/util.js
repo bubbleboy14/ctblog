@@ -59,12 +59,16 @@ blog.core.util = {
 		if (mode == "post") {
 			return CT.dom.div([
 				unode,
-				CT.dom.div(p.title, "biggest bold padded"),
-				CT.dom.img(p.img, "w1"),
-				CT.dom.div(p.blurb, "gray italic blockquote"),
-				CT.dom.div(p.body.split("\n").map(function(sec) {
-					return sec || CT.dom.br();
-				}), "ctblog_body padded"),
+				CT.dom.div(p.title, "ctblog_title"),
+				CT.dom.div([
+					CT.dom.img(p.img, "w1"),
+					CT.dom.div([
+						CT.dom.div(p.blurb, "ctblog_blurb"),
+						CT.dom.div(p.body.split("\n").map(function(sec) {
+							return sec || CT.dom.br();
+						}), "ctblog_body"),
+					], "ctblog_text")
+				], "ctblog_content"),
 				cnode
 			], "bordered padded round");
 		} else if (mode == "videopost") {
