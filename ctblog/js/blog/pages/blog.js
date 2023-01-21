@@ -17,6 +17,7 @@ var setSlide = function(collection, frameCb) {
 		frames: collection,
 		noStyle: true,
 		autoSlide: false,
+		dragFirstFirst: true,
 		parent: "ctmain",
 		arrowPosition: "bottom",
 		bubblePosition: "bottom",
