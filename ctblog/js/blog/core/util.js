@@ -26,7 +26,7 @@ blog.core.util = {
 				CT.dom.setContent(unode, CT.dom.link([
 					CT.dom.img(poster.img, "w100 block"),
 					CT.dom.div(poster.firstName + " " + poster.lastName, "small centered")
-				], null, "/user/profile.html#" + p.key, "round block hoverglow"));
+				], null, "/user/profile.html#" + poster.key, "round block hoverglow"));
 				if (!p.commentary) return;
 				var content = [
 					CT.dom.div("Comments", "bigger bold"),
