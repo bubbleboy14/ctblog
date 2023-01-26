@@ -60,6 +60,13 @@ var charts = function() {
 	});
 };
 
+var hlfix = function(atag) {
+	atag.onclick = function() {
+		location = atag.href;
+		location.reload();
+	}
+};
+
 CT.onload(function() {
 	CT.initCore();
 	mcfg.video && CT.parse.enableVideo();
@@ -71,6 +78,7 @@ CT.onload(function() {
 			blog.view.simple(h);
 			CT.dom.setMain(CT.parse.process(proc(text)));
 			CT.dom.tag("iframe").forEach(ytFix);
+			CT.dom.Q("a[href^='" + location.origin + location.pathname + "']").forEach(hlfix);
 			CT.dom.className("hmaxtrans").forEach(expando);
 			charts();
 		}
