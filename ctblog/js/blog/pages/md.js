@@ -2,7 +2,11 @@ CT.require("CT.all");
 CT.require("core");
 CT.require("blog.view");
 CT.scriptImport("https://cdn.jsdelivr.net/npm/marked/marked.min.js");
-var cfg = core.config.ctblog.md;
+var cfg = core.config,
+	ccfg = cfg.CC,
+	mcfg = cfg.ctblog.md;
+if (ccfg && ccfg.gateway)
+	CT.scriptImport(ccfg.gateway);
 
 var poLine = function(line) {
 	if (line.startsWith("#"))
@@ -14,7 +18,7 @@ var poetrize = function(text) {
 	return text.split("\n").map(poLine).join("\n").slice(0, -1);
 };
 var proc = function(text) {
-	if (cfg.poetry)
+	if (mcfg.poetry)
 		text = poetrize(text);
 	return marked.marked(text.replace(/\n\n"""\n/g,
 		"<div class='big blockquote'>").replace(/\n"""\n\n/g, "</div>").replace(/\n\n'''\n/g,
@@ -58,7 +62,7 @@ var charts = function() {
 
 CT.onload(function() {
 	CT.initCore();
-	cfg.video && CT.parse.enableVideo();
+	mcfg.video && CT.parse.enableVideo();
 	var h = location.hash.slice(1);
 	fetch("/md/" + h + ".md").then(d => d.text()).then(function(text) {
 		if (text.startsWith("<b>404</b>"))
