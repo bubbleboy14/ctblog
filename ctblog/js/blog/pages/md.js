@@ -1,5 +1,6 @@
 CT.require("CT.all");
 CT.require("core");
+CT.require("blog.view");
 CT.scriptImport("https://cdn.jsdelivr.net/npm/marked/marked.min.js");
 var cfg = core.config.ctblog.md;
 
@@ -63,6 +64,7 @@ CT.onload(function() {
 		if (text.startsWith("<b>404</b>"))
 			CT.dom.setMain(CT.dom.div("can't find it!", "centered"));
 		else {
+			blog.view.simple(h);
 			CT.dom.setMain(CT.parse.process(proc(text)));
 			CT.dom.tag("iframe").forEach(ytFix);
 			CT.dom.className("hmaxtrans").forEach(expando);

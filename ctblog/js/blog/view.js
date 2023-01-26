@@ -41,6 +41,12 @@ blog.view = {
 				_.emit(memship, p.title);
 		}
 	},
+	simple: function(title) {
+		var ccfg = core.config.CC,
+			memship = ccfg && ccfg.membership,
+			_ = blog.view._;
+		memship && _.emit(memship, title);
+	},
 	viewable: function(p) {
 		var n = blog.core.util.post(p);
 		n.on("visible", function() {
