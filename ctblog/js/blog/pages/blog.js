@@ -12,6 +12,8 @@ var cfg = core.config,
 if (ccfg && ccfg.gateway)
 	CT.scriptImport(ccfg.gateway);
 
+bcfg.preloadImgs && CT.slider.setPreloadImgs(true);
+
 var setSlide = function(collection, frameCb) {
 	var slider = new CT.slider.Slider({
 		frames: collection,
