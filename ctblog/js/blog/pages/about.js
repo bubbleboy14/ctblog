@@ -8,8 +8,7 @@ CT.onload(function() {
 	var cfg = core.config.ctblog.about;
 	if (cfg.blurb)
 		CT.dom.setContent("ctmain",
-			CT.dom.node(cfg.blurb,
-				"div", "blockquote"));
+			CT.dom.div(cfg.blurb, cfg.blurbClass || "blockquote"));
 	if (cfg.slider.length) {
 		var snode = CT.dom.node(null, null, core.config.ctblog.slider_class);
 		CT.dom.addContent(document.body, snode);
