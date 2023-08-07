@@ -72,7 +72,7 @@ var jtoclink = function(h2node) {
 		h2node.scrollIntoView({
 			behavior: "smooth"
 		});
-	});
+	}, null, "hoverglow pointer block");
 };
 
 var jtoc = function() {
@@ -87,7 +87,7 @@ var jnavlink = function(name) {
 	return CT.dom.link(name, function() {
 		location = "/blog/md.html#" + name;
 		location.reload();
-	});;
+	}, null, "hoverglow pointer block");;
 };
 
 var jnav = function() {
