@@ -76,9 +76,11 @@ var jtoclink = function(h2node) {
 };
 
 var jtoc = function() {
+	var tnode = CT.dom.tag("h1").pop();
+	if (!tnode) return;
 	return [
 		"page [toc]",
-		CT.dom.div(CT.dom.tag("h1").pop().innerHTML, "big"),
+		CT.dom.div(tnode.innerHTML, "big"),
 		CT.dom.tag("h2").map(jtoclink)
 	];
 };
@@ -112,16 +114,16 @@ var jmenu = function() {
 			center: false,
 			noClose: true,
 			slide: {
-				origin: "topright"
+				origin: "bottomright"
 			}
 		}, true, true);
 	}
-	jmenu._men.show("ctmain");
+	jmenu._men.show();
 };
 
 var jumpers = function() {
 	CT.dom.addMain(CT.dom.link("jump", jmenu, null,
-		"abs ctr big bold bordered padded round");
+		"abs ctr big bold bordered padded round"));
 };
 
 CT.onload(function() {
