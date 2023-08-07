@@ -79,7 +79,7 @@ var jtoc = function() {
 	var tnode = CT.dom.tag("h1").pop();
 	if (!tnode) return;
 	return [
-		"page [toc]",
+		CT.dom.div("page [toc]", "right italic"),
 		CT.dom.div(tnode.innerHTML, "big"),
 		CT.dom.tag("h2").map(jtoclink)
 	];
@@ -101,7 +101,7 @@ var jnav = function() {
 		},
 		cb: mdz => CT.dom.setContent(n, mdz.map(jnavlink))
 	});
-	return ["site [nav]", n];
+	return [CT.dom.div("site [nav]", "right italic"), n];
 };
 
 var jmenu = function() {
