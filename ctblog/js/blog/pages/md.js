@@ -67,6 +67,63 @@ var hlfix = function(atag) {
 	}
 };
 
+var jtoclink = function(h2node) {
+	return CT.dom.link(h2node.innerHTML, function() {
+		h2node.scrollIntoView({
+			behavior: "smooth"
+		});
+	});
+};
+
+var jtoc = function() {
+	return [
+		"page [toc]",
+		CT.dom.div(CT.dom.tag("h1").pop().innerHTML, "big"),
+		CT.dom.tag("h2").map(jtoclink)
+	];
+};
+
+var jnavlink = function(name) {
+	return CT.dom.link(name, function() {
+		location = "/blog/md.html#" + name;
+		location.reload();
+	});;
+};
+
+var jnav = function() {
+	var n = CT.dom.div();
+	CT.net.post({
+		path: "/_blog",
+		params: {
+			action: "md"
+		},
+		cb: mdz => CT.dom.setContent(n, mdz.map(jnavlink))
+	});
+	return ["site [nav]", n];
+};
+
+var jmenu = function() {
+	var cont;
+	if (!jmenu._men) {
+		cont = [];
+		mcfg.toc && cont.push(jtoc());
+		mcfg.nav && cont.push(jnav());
+		jmenu._men = CT.modal.modal(cont, null, {
+			center: false,
+			noClose: true,
+			slide: {
+				origin: "topright"
+			}
+		}, true, true);
+	}
+	jmenu._men.show("ctmain");
+};
+
+var jumpers = function() {
+	CT.dom.addMain(CT.dom.link("jump", jmenu, null,
+		"abs ctr big bold bordered padded round");
+};
+
 CT.onload(function() {
 	CT.initCore();
 	mcfg.video && CT.parse.enableVideo();
@@ -82,5 +139,6 @@ CT.onload(function() {
 			CT.dom.className("hmaxtrans").forEach(expando);
 			charts();
 		}
+		(mcfg.toc || mcfg.nav) && jumpers();
 	});
 });
