@@ -123,7 +123,7 @@ var jmenu = function() {
 
 var jumpers = function() {
 	CT.dom.addBody(CT.dom.link("jump", jmenu, null,
-		"abs cbr big bold bordered padded round"));
+		"abs cbr big bold padded margined hoverglow grayback-trans round right20"));
 };
 
 CT.onload(function() {
