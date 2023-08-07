@@ -1,13 +1,13 @@
 import os
 from datetime import datetime, timedelta
 from cantools.web import respond
-from cantools.util import log, output, transcode, shouldMoveMoov, hlsify
+from cantools.util import log, output, thumb, transcode, shouldMoveMoov, hlsify
 from cantools import config
 from model import *
 
 bvcfg = config.ctblog.video
 
-class Moover(object):
+class Moover(object): # moves moov and generates thumb
 	def __init__(self):
 		self.log("init")
 		self.checked = set()
@@ -16,7 +16,7 @@ class Moover(object):
 				self.log("initializing 'checked' status of %s videos"%(len(fz),))
 				for f in fz:
 					self.checked.add(f)
-			return
+			return # we should do this recursively...
 
 	def log(self, msg):
 		log("Moover: %s"%(msg,))
@@ -24,6 +24,7 @@ class Moover(object):
 	def check(self, fname):
 		fpath = "v/%s"%(fname,)
 		shouldMoveMoov(fpath) and transcode(fpath)
+		thumb(fpath, dest="img", forceDest=True)
 		self.checked.add(fname)
 
 	def __call__(self):
@@ -32,7 +33,7 @@ class Moover(object):
 			for f in fz:
 				if f not in self.checked:
 					self.check(f)
-			return
+			return # we should do this recursively.....
 
 moover = Moover()
 
