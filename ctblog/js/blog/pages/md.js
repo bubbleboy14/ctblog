@@ -122,8 +122,8 @@ var jmenu = function() {
 };
 
 var jumpers = function() {
-	CT.dom.addMain(CT.dom.link("jump", jmenu, null,
-		"abs ctr big bold bordered padded round"));
+	CT.dom.addBody(CT.dom.link("jump", jmenu, null,
+		"abs cbr big bold bordered padded round"));
 };
 
 CT.onload(function() {
