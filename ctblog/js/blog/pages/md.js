@@ -127,7 +127,10 @@ var jumpers = function() {
 };
 
 var h2fix = function(n) {
-	n.children.length && n.replaceWith(CT.dom.div(n.innerHTML));
+	if (!n.children.length) return;
+	var realH2 = CT.dom.node(n.lastChild.data, "h2");
+	n.lastChild.remove();
+	n.replaceWith(CT.dom.div([CT.dom.div(n.innerHTML), realH2]));
 };
 
 CT.onload(function() {
