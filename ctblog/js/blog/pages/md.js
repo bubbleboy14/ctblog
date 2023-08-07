@@ -126,6 +126,10 @@ var jumpers = function() {
 		"abs cbr big bold padded margined hoverglow grayback-trans round right20"));
 };
 
+var h2fix = function(n) {
+	n.children.length && n.replace(CT.dom.div(n.innerHTML));
+};
+
 CT.onload(function() {
 	CT.initCore();
 	mcfg.video && CT.parse.enableVideo();
@@ -139,6 +143,7 @@ CT.onload(function() {
 			CT.dom.tag("iframe").forEach(ytFix);
 			CT.dom.Q("a[href^='" + location.origin + location.pathname + "']").forEach(hlfix);
 			CT.dom.className("hmaxtrans").forEach(expando);
+			CT.dom.tag("h2").forEach(h2fix);
 			charts();
 		}
 		(mcfg.toc || mcfg.nav) && jumpers();
