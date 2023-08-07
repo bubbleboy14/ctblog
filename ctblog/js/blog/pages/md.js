@@ -127,7 +127,7 @@ var jumpers = function() {
 };
 
 var h2fix = function(n) {
-	n.children.length && n.replace(CT.dom.div(n.innerHTML));
+	n.children.length && n.replaceWith(CT.dom.div(n.innerHTML));
 };
 
 CT.onload(function() {
