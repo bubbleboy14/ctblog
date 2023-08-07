@@ -67,6 +67,16 @@ var hlfix = function(atag) {
 	}
 };
 
+var exper = function(label, node) {
+	var enode = CT.dom.link("-" + label, function(e) {
+		e.stopPropagation();
+		CT.dom.showHide(node);
+		enode._hidden = !enode._hidden;
+		CT.dom.setContent(enode, (enode._hidden ? "+" : "-") + label);
+	}, null, "right italic green");
+	return enode;
+};
+
 var jtoclink = function(h2node) {
 	return CT.dom.link(h2node.innerHTML, function() {
 		h2node.scrollIntoView({
@@ -76,13 +86,14 @@ var jtoclink = function(h2node) {
 };
 
 var jtoc = function() {
-	var tnode = CT.dom.tag("h1").pop();
+	var tnode = CT.dom.tag("h1").pop(), toc;
 	if (!tnode) return;
-	return [
-		CT.dom.div("page [toc]", "right italic"),
+	toc = CT.dom.div(CT.dom.tag("h2").map(jtoclink));
+	return CT.dom.div([
+		exper("page [toc]", toc),
 		CT.dom.div(tnode.innerHTML, "big"),
-		CT.dom.tag("h2").map(jtoclink)
-	];
+		toc
+	], "bottommargined");
 };
 
 var jnavlink = function(name) {
@@ -101,7 +112,7 @@ var jnav = function() {
 		},
 		cb: mdz => CT.dom.setContent(n, mdz.map(jnavlink))
 	});
-	return [CT.dom.div("site [nav]", "right italic"), n];
+	return [CT.dom.div(exper("site [nav]", n), "right italic"), n];
 };
 
 var jmenu = function() {
