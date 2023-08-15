@@ -1,6 +1,7 @@
 blog.vcfg = {
+	_: {},
 	build: function(videos) { // {all[],tagged[]}
-		new blog.vcfg.Browser({
+		blog.vcfg._.browser = new blog.vcfg.Browser({
 			videos: videos
 		});
 	},
@@ -18,26 +19,33 @@ blog.vcfg = {
 blog.vcfg.Browser = CT.Class({
 	view: function(d) {
 		// override!
-		CT.dom.setContent(_.nodes.content, [
+		CT.dom.setContent(this._.nodes.content, [
 			this.namer(d),
 			JSON.stringify(d)
 		]);
 	},
 	firstview: function(d) {
+		this._.tagged[d.name] = d;
 		this.view(d);
 	},
 	defaults: function() {
-		// override
+		return {
+			tags: []
+		};
 	},
 	items: function(items) {
-		// override
+		var i, tz = this._.tagged;
+		for (i of items)
+			tz[i.name] = i;
 	},
 	init: function(opts) {
 		var vz = opts.videos;
 		this.opts = CT.merge(opts, {
 			modelName: "vid",
 			items: vz.tagged,
-			allvids: vz.all
+			allvids: vz.all,
+			owner: false // revisit?
 		}, this.opts);
+		this._.tagged = {};
 	}
 }, CT.Browser);
