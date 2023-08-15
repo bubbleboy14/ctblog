@@ -45,7 +45,7 @@ class Comment(db.TimeStampedBase):
 	body = db.Text()
 
 class Vid(db.TimeStampedBase):
-	title = db.String()
+	filename = db.String()
 	name = db.String()
 	blurb = db.Text()
 	tags = db.ForeignKey(kind=Tag, repeated=True)
