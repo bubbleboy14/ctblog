@@ -20,11 +20,37 @@ blog.vcfg = {
 };
 
 blog.vcfg.Browser = CT.Class({
+	saver: function(d, prop, val) {
+		var edited = this._.edited;
+		d[prop] = val;
+		blog.vcfg.vz(function(upd) {
+			edited(d, upd);
+			Object.assign(d, upd);
+		}, {
+			vinfo: d
+		});
+	},
+	blurber: function(d) {
+		return CT.dom.smartField({
+			isTA: true,
+			value: d.blurb,
+			classname: "w1 h200p",
+			blurs: ["describe the video", "what's it about?", "tell me about it"],
+			cb: val => this.saver(d, "blurb", val)
+		});
+	},
+	tagger: function(d) { // tags[]
+
+	},
+	filer: function(d) { // filename
+
+	},
 	view: function(d) {
-		// TODO: tags[] ; filename
 		CT.dom.setContent(this._.nodes.content, [
 			this.namer(d),
-			JSON.stringify(d)
+			this.blurber(d),
+			this.tagger(d),
+			this.filer(d)
 		]);
 	},
 	firstview: function(d) {
