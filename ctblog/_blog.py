@@ -3,7 +3,7 @@ from cantools.web import respond, succeed, fail, cgi_get, clearmem
 from cantools.util import log
 from cantools.db import edit
 from cantools import config
-from model import db, Comment, Photo, Vid
+from model import db, Comment, Photo, Vid, Tag
 
 def flist(path, ext, rando=False):
 	fl = list(filter(lambda i : i.endswith(ext), os.listdir(path)))
@@ -16,7 +16,15 @@ def vchan():
 def response():
 	if config.memcache.db:
 		clearmem()
-	action = cgi_get("action", choices=["post", "videopost", "comment", "photo", "photoset", "md", "ranvid", "imgz", "rm", "vz"])
+	action = cgi_get("action", choices=["post", "videopost", "comment", "photo", "photoset", "md", "ranvid", "imgz", "rm", "vz", "tz"])
+	if action == "tz":
+		tname = cgi_get("name")
+		if Tag.query(Tag.name == tname).get():
+			fail("that tag exists")
+		t = Tag()
+		t.name = tname
+		t.put()
+		succeed(t.data())
 	if action == "vz":
 		vinfo = cgi_get("vinfo", required=False)
 		succeed(vinfo and edit(vinfo).data() or {
