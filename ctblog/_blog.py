@@ -4,7 +4,7 @@ from cantools.util import log
 from cantools import config
 from model import db, Comment, Photo, Vid
 
-def flist(path, ext, rando=False)
+def flist(path, ext, rando=False):
 	fl = list(filter(lambda i : i.endswith(ext), os.listdir(path)))
 	return rando and random.choices(fl, k=cgi_get("count", default=20)) or fl
 
