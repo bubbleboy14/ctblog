@@ -1,24 +1,27 @@
 blog.vcfg = {
 	_: {},
+	vz: function(cb, params) {
+		CT.net.post({
+			path: "/_blog",
+			params: CT.merge({
+				action: "vz"
+			}, params),
+			cb: cb
+		});
+	},
 	build: function(videos) { // {all[],tagged[]}
 		blog.vcfg._.browser = new blog.vcfg.Browser({
 			videos: videos
 		});
 	},
 	init: function() {
-		CT.net.post({
-			path: "/_blog",
-			params: {
-				action: "vz"
-			},
-			cb: blog.vcfg.build
-		});
+		blog.vcfg.vz(blog.vcfg.build);
 	}
 };
 
 blog.vcfg.Browser = CT.Class({
 	view: function(d) {
-		// override!
+		// TODO: tags[] ; filename
 		CT.dom.setContent(this._.nodes.content, [
 			this.namer(d),
 			JSON.stringify(d)
