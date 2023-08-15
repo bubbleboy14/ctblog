@@ -1,6 +1,7 @@
 import os, random
 from cantools.web import respond, succeed, fail, cgi_get, clearmem
 from cantools.util import log
+from cantools.db import edit
 from cantools import config
 from model import db, Comment, Photo, Vid
 
@@ -17,7 +18,8 @@ def response():
 		clearmem()
 	action = cgi_get("action", choices=["post", "videopost", "comment", "photo", "photoset", "md", "ranvid", "imgz", "rm", "vz"])
 	if action == "vz":
-		succeed({
+		vinfo = cgi_get("vinfo", required=False)
+		succeed(vinfo and edit(vinfo).data() or {
 			"all": flist(vchan(), ".mp4"),
 			"tagged": [v.data() for v in Vid.query().all()]
 		})
