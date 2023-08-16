@@ -6,14 +6,24 @@ blog.vcfg.Filer = CT.Class({
 	upload: function(d) {
 		alert("unimplemented");
 	},
+	unfiled: function() {
+		return this.vids.map(v => v.split(".")[0]).filter(n => !(n in this.filed));
+	},
+	unfimgs: function() {
+		return this.unfiled().map(n => "/img/v/" + n + ".jpg");
+	},
+	register: function(d, filename) {
+		if (d.filename) // unregister
+			delete this.filed[d.filename];
+		this.filed[filename] = d;
+		this.saver(d, "filename", filename);
+	},
 	select: function(d) {
 		CT.modal.prompt({
 			prompt: "please select the video",
 			style: "icon",
-			data: this.allvids,
-			cb: function(vsel) {
-
-			}
+			data: this.unfimgs(),
+			cb: ipath => this.register(d, ipath.split("/").pop().split(".")[0])
 		});
 	},
 	edit: function(d) {
@@ -23,7 +33,7 @@ blog.vcfg.Filer = CT.Class({
 			cb: sel => this[sel](d)
 		});
 	},
-	file: function(d) {
+	files: function(d) {
 		var cont = [
 			CT.dom.button("edit", () => this.edit(d), "right"),
 			"file"
@@ -39,9 +49,17 @@ blog.vcfg.Filer = CT.Class({
 			cont.push("(no file specified");
 		return CT.dom.div(cont, "bordered padded round mt10");
 	},
+	file: function() {
+		this.filed = {};
+		for (var t in this.tagged)
+			if (this.tagged[t].filename)
+				this.filed[this.tagged[t].filename] = this.tagged[t];
+	},
 	init: function(opts) {
 		this.opts = opts;
+		this.vids = opts.vids;
 		this.saver = opts.saver;
-		this.allvids = opts.allvids;
+		this.tagged = opts.tagged;
+		this.file();
 	}
 });
