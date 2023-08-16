@@ -5,5 +5,5 @@ CT.require("blog.vcfg");
 
 CT.onload(function() {
 	CT.initCore();
-	blog.vcfg.init();
+	blog.vcfg.util.init();
 });
