@@ -56,6 +56,7 @@ blog.vcfg = {
 };
 
 blog.vcfg.Tagger = CT.Class({
+	CLASSNAME: "blog.vcfg.Tagger",
 	edit: function(d) {
 		blog.vcfg.tag(d, tags => this.saver(d, "tags", tags));
 	},
@@ -76,7 +77,56 @@ blog.vcfg.Tagger = CT.Class({
 	}
 });
 
+blog.vcfg.Filer = CT.Class({
+	CLASSNAME: "blog.vcfg.Filer",
+	xplat: function(d) {
+		alert("unimplemented");
+	},
+	upload: function(d) {
+		alert("unimplemented");
+	},
+	select: function(d) {
+		CT.modal.prompt({
+			prompt: "please select the video",
+			style: "icon",
+			data: this.allvids,
+			cb: function(vsel) {
+
+			}
+		});
+	},
+	edit: function(d) {
+		CT.modal.choice({
+			prompt: "how do you want to specify the video file?",
+			data: ["select", "upload", "xplat"],
+			cb: sel => this[sel](d)
+		});
+	},
+	file: function(d) {
+		var cont = [
+			CT.dom.button("edit", () => this.edit(d), "right"),
+			"file"
+		];
+		if (d.filename) {
+			cont.push([
+				CT.dom.img("/img/v/" + d.filename + ".jpg", "w1"),
+				CT.dom.link(d.filename, function() {
+					CT.modal.modal(CT.dom.video("/v/" + d.filename + ".mp4"));
+				})
+			]);
+		} else
+			cont.push("(no file specified");
+		return CT.dom.div(cont, "bordered padded round mt10");
+	},
+	init: function(opts) {
+		this.opts = opts;
+		this.saver = opts.saver;
+		this.allvids = opts.allvids;
+	}
+});
+
 blog.vcfg.Browser = CT.Class({
+	CLASSNAME: "blog.vcfg.Browser",
 	saver: function(d, prop, val) {
 		var edited = this._.edited, eopts = {};
 		d[prop] = eopts[prop] = val;
@@ -100,15 +150,12 @@ blog.vcfg.Browser = CT.Class({
 			cb: val => this.saver(d, "blurb", val)
 		});
 	},
-	filer: function(d) { // filename
-
-	},
 	view: function(d) {
 		CT.dom.setContent(this._.nodes.content, [
 			this.namer(d),
 			this.blurber(d),
 			this.tagger.tags(d),
-			this.filer(d)
+			this.filer.file(d)
 		]);
 	},
 	firstview: function(d) {
@@ -136,6 +183,10 @@ blog.vcfg.Browser = CT.Class({
 		this._.tagged = {}
 		this.tagger = new blog.vcfg.Tagger({
 			saver: this.saver
+		});
+		this.filer = new blog.vcfg.Filer({
+			saver: this.saver,
+			allvids: opts.allvids
 		});
 	}
 }, CT.Browser);
