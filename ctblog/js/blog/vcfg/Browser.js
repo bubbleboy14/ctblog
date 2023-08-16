@@ -28,7 +28,7 @@ blog.vcfg.Browser = CT.Class({
 			this.namer(d),
 			this.blurber(d),
 			this.tagger.tags(d),
-			this.filer.file(d)
+			this.filer.files(d)
 		]);
 	},
 	firstview: function(d) {
@@ -58,8 +58,9 @@ blog.vcfg.Browser = CT.Class({
 			saver: this.saver
 		});
 		this.filer = new blog.vcfg.Filer({
+			vids: vz.all,
 			saver: this.saver,
-			allvids: opts.allvids
+			tagged: this._.tagged
 		});
 	}
 }, CT.Browser);
