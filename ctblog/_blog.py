@@ -1,19 +1,40 @@
 import os, random
 from cantools.web import respond, succeed, fail, cgi_get, clearmem
 from cantools.util import log
+from cantools.db import edit
 from cantools import config
-from model import db, Comment, Photo
+from model import db, Comment, Photo, Vid, Tag
+
+def flist(path, ext, rando=False):
+	fl = list(filter(lambda i : i.endswith(ext), os.listdir(path)))
+	return rando and random.choices(fl, k=cgi_get("count", default=20)) or fl
+
+def vchan():
+	channel = cgi_get("channel", required=False, shield=True)
+	return channel and "v/%s"%(channel,) or "v"
 
 def response():
 	if config.memcache.db:
 		clearmem()
-	action = cgi_get("action", choices=["post", "videopost", "comment", "photo", "photoset", "md", "ranvid", "imgz", "rm"])
+	action = cgi_get("action", choices=["post", "videopost", "comment", "photo", "photoset", "md", "ranvid", "imgz", "rm", "vz", "tz"])
+	if action == "tz":
+		tname = cgi_get("name")
+		if Tag.query(Tag.name == tname).get():
+			fail("that tag exists")
+		t = Tag()
+		t.name = tname
+		t.put()
+		succeed(t.data())
+	if action == "vz":
+		vinfo = cgi_get("vinfo", required=False)
+		succeed(vinfo and edit(vinfo).data() or {
+			"all": flist(vchan(), ".mp4"),
+			"tagged": [v.data() for v in Vid.query().all()]
+		})
 	if action == "imgz":
-		succeed(random.choices(list(filter(lambda i : i.endswith(".jpg"),
-			os.listdir(os.path.join("img", "z")))), k=cgi_get("count", default=20)))
+		succeed(flist(os.path.join("img", "z"), ".jpg", True))
 	if action == "ranvid":
-		channel = cgi_get("channel", required=False, shield=True)
-		p = channel and "v/%s"%(channel,) or "v"
+		p = vchan()
 		for dn, dz, fz in os.walk(p):
 			vpath = "/%s/%s"%(p, random.choice(fz))
 			log("ranvid: %s"%(vpath,))

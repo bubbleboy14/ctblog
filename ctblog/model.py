@@ -1,5 +1,5 @@
 from cantools import db
-from ctuser.model import CTUser
+from ctuser.model import CTUser, Tag
 
 class Author(CTUser):
 	cc = db.JSON() # carecoin {person,membership}
@@ -43,3 +43,9 @@ class Comment(db.TimeStampedBase):
 	user = db.ForeignKey() # CTUser, Author, or whatever else
 	post = db.ForeignKey(kinds=["post", "videopost", "photoset"])
 	body = db.Text()
+
+class Vid(db.TimeStampedBase):
+	filename = db.String()
+	name = db.String()
+	blurb = db.Text()
+	tags = db.ForeignKey(kind=Tag, repeated=True)
