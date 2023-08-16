@@ -23,6 +23,11 @@ blog.vcfg.Filer = CT.Class({
 			prompt: "please select the video",
 			style: "icon",
 			data: this.unfimgs(),
+			className: "basicpopup mosthigh galimg",
+			center: false,
+			slide: {
+				origin: "bottomright"
+			},
 			cb: ipath => this.register(d, ipath.split("/").pop().split(".")[0])
 		});
 	},
@@ -40,10 +45,19 @@ blog.vcfg.Filer = CT.Class({
 		];
 		if (d.filename) {
 			cont.push([
-				CT.dom.img("/img/v/" + d.filename + ".jpg", "w1"),
-				CT.dom.link(d.filename, function() {
-					CT.modal.modal(CT.dom.video("/v/" + d.filename + ".mp4"));
-				})
+				CT.dom.link(d.filename + " (click to play)", function() {
+					CT.modal.modal(CT.dom.video({
+						src: "/v/" + d.filename + ".mp4",
+						className: "wm400p hm400p",
+						controls: true
+					}), null, {
+						center: false,
+						slide: {
+							origin: "bottomleft"
+						}
+					});
+				}, null, "block centered up30"),
+				CT.dom.img("/img/v/" + d.filename + ".jpg", "w1")
 			]);
 		} else
 			cont.push("(no file specified");
