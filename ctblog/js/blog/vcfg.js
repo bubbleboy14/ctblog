@@ -32,8 +32,8 @@ blog.vcfg = {
 		CT.modal.choice({
 			prompt: "please select your tags",
 			style: "multiple-choice",
-			selections: d.tags,
 			data: ["new tag"].concat(_.tags),
+			selections: d.tags.map(t => CT.data.get(t).name),
 			cb: function(tags) {
 				if (tags[0] == "new tag")
 					return _.tag(() => bv.tag(d, cb));
