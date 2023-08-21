@@ -83,9 +83,12 @@ blog.core.util = {
 			var shopho = function(photo) {
 				CT.modal.modal(CT.dom.img(photo.img, "w1"));
 			};
+			var acla = cfg.blog.autoclasses,
+				titleclass = acla ? "bigger bold padded centered" : "ctblog_title",
+				blurbclass = acla ? "padded" : "ctblog_blurb";
 			if (cfg.blog.photoset_embed) {
-				var bnode = CT.dom.div(null, "padded"), pnode = CT.dom.div([
-					CT.dom.div(p.title, "bigger bold padded centered"),
+				var bnode = CT.dom.div(null, blurbclass), pnode = CT.dom.div([
+					CT.dom.div(p.title, titleclass),
 					bnode
 				]), bsplit = p.blurb.split("\n"), ipos = "right", content = [
 				], pnum = 0, pushPhoto = function(bottom) {
@@ -117,8 +120,8 @@ blog.core.util = {
 			} else {
 				var snode = CT.dom.div(null, "relative noflow w1 h400p"),
 					pnode = CT.dom.div([
-						CT.dom.div(p.title, "ctblog_title"),
-						CT.dom.div(p.blurb.replace(/\n/g, "<br>"), "ctblog_blurb"),
+						CT.dom.div(p.title, titleclass),
+						CT.dom.div(p.blurb.replace(/\n/g, "<br>"), blurbclass),
 						snode
 					]);
 				CT.db.multi(p.photos, function() {
