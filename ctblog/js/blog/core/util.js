@@ -92,7 +92,7 @@ blog.core.util = {
 					var photo = CT.data.get(p.photos[pnum]);
 					if (photo) {
 						content.push(CT.dom.img({
-							imgclass: "padded " + (bottom && "h200p" || ("w1-4 " + ipos)),
+							imgclass: cfg.blog.photoset_embed_class || ("padded " + (bottom && "h200p" || ("w1-4 " + ipos))),
 							title: photo.caption,
 							src: photo.img,
 							onclick: () => shopho(photo)
