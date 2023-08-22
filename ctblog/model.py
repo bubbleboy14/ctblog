@@ -45,6 +45,7 @@ class Comment(db.TimeStampedBase):
 	body = db.Text()
 
 class Vid(db.TimeStampedBase):
+	owner = db.ForeignKey() # CTUser, Author, or whatever else
 	filename = db.String()
 	name = db.String()
 	blurb = db.Text()
