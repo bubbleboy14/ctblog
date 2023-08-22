@@ -50,8 +50,7 @@ blog.vcfg.Browser = CT.Class({
 		this.opts = CT.merge(opts, {
 			modelName: "vid",
 			items: vz.tagged,
-			allvids: vz.all,
-			owner: false // revisit?
+			allvids: vz.all
 		}, this.opts);
 		this._.tagged = {}
 		this.tagger = new blog.vcfg.Tagger({
