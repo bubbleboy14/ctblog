@@ -29,7 +29,8 @@ blog.vcfg.Filer = CT.Class({
 			page: 10,
 			data: this.unfimgs(),
 			iclick: this.preview,
-			className: "basicpopup mosthigh galimg wm1-2i",
+			searchable: "up20 right",
+			className: "basicpopup mosthigh galimg wm1-2i wmin200p",
 			center: false,
 			slide: {
 				origin: "bottomright"
