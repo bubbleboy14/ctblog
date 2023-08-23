@@ -1,10 +1,14 @@
 blog.vcfg.Filer = CT.Class({
 	CLASSNAME: "blog.vcfg.Filer",
+	_: {},
 	xplat: function(d) {
 		alert("unimplemented");
 	},
 	upload: function(d) {
 		alert("unimplemented");
+	},
+	p2n: function(path) {
+		return path.split("/").pop().split(".")[0];
 	},
 	unfiled: function() {
 		return this.vids.map(v => v.split(".")[0]).filter(n => !(n in this.filed));
@@ -24,12 +28,13 @@ blog.vcfg.Filer = CT.Class({
 			style: "icon",
 			page: 10,
 			data: this.unfimgs(),
-			className: "basicpopup mosthigh galimg",
+			iclick: this.preview,
+			className: "basicpopup mosthigh galimg wm1-2i",
 			center: false,
 			slide: {
 				origin: "bottomright"
 			},
-			cb: ipath => this.register(d, ipath.split("/").pop().split(".")[0])
+			cb: ipath => this.register(d, this.p2n(ipath))
 		});
 	},
 	edit: function(d) {
@@ -39,6 +44,26 @@ blog.vcfg.Filer = CT.Class({
 			cb: sel => this[sel](d)
 		});
 	},
+	preview: function(filename) {
+		var _ = this._;
+		if (filename.startsWith("/"))
+			filename = this.p2n(filename);
+		if (!_.previewer) {
+			var vid = CT.dom.video({
+				className: "wm400p hm400p",
+				controls: true
+			});
+			_.previewer = CT.modal.modal(vid, null, {
+				center: false,
+				slide: {
+					origin: "bottomleft"
+				}
+			}, true, true);
+			_.previewer.video = vid;
+		}
+		_.previewer.video.src = "/v/" + filename + ".mp4";
+		_.previewer.show();
+	},
 	files: function(d) {
 		var cont = [
 			CT.dom.button("edit", () => this.edit(d), "right"),
@@ -46,18 +71,8 @@ blog.vcfg.Filer = CT.Class({
 		];
 		if (d.filename) {
 			cont.push([
-				CT.dom.link(d.filename + " (click to play)", function() {
-					CT.modal.modal(CT.dom.video({
-						src: "/v/" + d.filename + ".mp4",
-						className: "wm400p hm400p",
-						controls: true
-					}), null, {
-						center: false,
-						slide: {
-							origin: "bottomleft"
-						}
-					});
-				}, null, "block centered up30"),
+				CT.dom.link(d.filename + " (click to play)",
+					() => this.preview(d.filename), null, "block centered up30"),
 				CT.dom.img("/img/v/" + d.filename + ".jpg", "w1")
 			]);
 		} else
