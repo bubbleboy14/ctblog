@@ -22,6 +22,7 @@ blog.vcfg.Filer = CT.Class({
 		CT.modal.prompt({
 			prompt: "please select the video",
 			style: "icon",
+			page: 10,
 			data: this.unfimgs(),
 			className: "basicpopup mosthigh galimg",
 			center: false,
