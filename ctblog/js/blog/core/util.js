@@ -20,14 +20,14 @@ blog.core.util = {
 			var required = comments.map(function(c) {
 				return c.user;
 			});
-			required.push(p.user);
+			required.push(p.user || p.owner);
 			CT.db.multi(required, function() {
-				var poster = CT.data.get(p.user);
+				var poster = CT.data.get(p.user || p.owner);
 				CT.dom.setContent(unode, CT.dom.link([
 					CT.dom.img(poster.img, "w100 block"),
 					CT.dom.div(poster.firstName + " " + poster.lastName, "small centered")
 				], null, "/user/profile.html#" + poster.key, "round block hoverglow"));
-				if (!p.commentary) return;
+				if (!p.commentary && mode != "vid") return;
 				var content = [
 					CT.dom.div("Comments", "bigger bold"),
 					comments.map(blog.core.util.comment)
@@ -71,11 +71,13 @@ blog.core.util = {
 				], "ctblog_content"),
 				cnode
 			], "bordered padded round");
-		} else if (mode == "videopost") {
+		} else if (mode == "videopost" || mode == "vid") {
 			return CT.dom.div([
 				unode,
 				CT.dom.div(p.title, "biggest bold padded"),
-				blog.core.media.video.set(p, CT.dom.div()),
+				(mode == "vid") ? CT.dom.video("/v/" + p.filename + ".mp4", "w1", null, {
+					controls: true
+				}) : blog.core.media.video.set(p, CT.dom.div()),
 				CT.dom.div(p.blurb, "gray italic blockquote"),
 				cnode
 			], "bordered padded round");
