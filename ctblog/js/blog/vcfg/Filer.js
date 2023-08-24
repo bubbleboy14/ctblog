@@ -77,7 +77,7 @@ blog.vcfg.Filer = CT.Class({
 				CT.dom.img("/img/v/" + d.filename + ".jpg", "w1")
 			]);
 		} else
-			cont.push("(no file specified");
+			cont.push("(no file specified)");
 		return CT.dom.div(cont, "bordered padded round mt10");
 	},
 	file: function() {
