@@ -5,8 +5,10 @@ blog.vcfg.Browser = CT.Class({
 		d[prop] = eopts[prop] = val;
 		if (d.key)
 			eopts.key = d.key;
-		else
+		else {
+			eopts.owner = d.owner;
 			eopts.modelName = d.modelName;
+		}
 		blog.vcfg.util.vz(function(upd) {
 			edited(d, upd);
 			Object.assign(d, upd);
