@@ -33,7 +33,7 @@ blog.vcfg.Browser = CT.Class({
 	},
 	firstview: function(d) {
 		this._.tagged[d.name] = d;
-		this.view(d);
+		this.saver(d, "name", d.name);
 	},
 	defaults: function() {
 		return {
