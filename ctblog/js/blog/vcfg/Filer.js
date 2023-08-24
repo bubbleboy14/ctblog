@@ -72,12 +72,17 @@ blog.vcfg.Filer = CT.Class({
 		];
 		if (d.filename) {
 			cont.push([
-				CT.dom.link(d.filename + " (click to play)",
-					() => this.preview(d.filename), null, "block centered up30"),
+				CT.dom.div([
+					CT.dom.link("(play)", () => this.preview(d.filename)),
+					CT.dom.pad(),
+					CT.dom.span(d.filename, "bold"),
+					CT.dom.pad(),
+					CT.dom.link("(view)", null, "/blog/vid.html#" + d.key)
+				], "centered up30"),
 				CT.dom.img("/img/v/" + d.filename + ".jpg", "w1")
 			]);
 		} else
-			cont.push("(no file specified");
+			cont.push("(no file specified)");
 		return CT.dom.div(cont, "bordered padded round mt10");
 	},
 	file: function() {

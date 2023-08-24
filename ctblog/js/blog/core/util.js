@@ -15,23 +15,33 @@ blog.core.util = {
 	},
 	post: function(p) {
 		var cnode = CT.dom.node(), unode = CT.dom.div(null, "right"),
-			cfg = core.config.ctblog, mode = p.modelName;
+			cfg = core.config.ctblog, mode = p.modelName, ptit = p.title || p.name;
 		blog.core.db.comments(function(comments) {
 			var required = comments.map(function(c) {
 				return c.user;
 			});
-			required.push(p.user);
+			required.push(p.user || p.owner);
 			CT.db.multi(required, function() {
-				var poster = CT.data.get(p.user);
+				var poster = CT.data.get(p.user || p.owner);
 				CT.dom.setContent(unode, CT.dom.link([
 					CT.dom.img(poster.img, "w100 block"),
 					CT.dom.div(poster.firstName + " " + poster.lastName, "small centered")
 				], null, "/user/profile.html#" + poster.key, "round block hoverglow"));
-				if (!p.commentary) return;
+				if (!p.commentary && mode != "vid") return;
 				var content = [
 					CT.dom.div("Comments", "bigger bold"),
 					comments.map(blog.core.util.comment)
 				];
+				cfg.blog.mailto && content.unshift(CT.dom.link("email a friend", function() {
+					CT.modal.prompt({
+						prompt: "what's your friend's email address?",
+						cb: function(email) {
+							CT.modal.modal(CT.dom.link("click here to email " + email, null,
+								"mailto:" + email + "?subject=" + escape(ptit) + "&body=" + escape(p.blurb),
+								"bordered padded margined round block hoverglow"));
+						}
+					});
+				}, null, "right"));
 				if (blog.core.util._user)
 					content.push([
 						CT.dom.smartField({
@@ -71,11 +81,13 @@ blog.core.util = {
 				], "ctblog_content"),
 				cnode
 			], "bordered padded round");
-		} else if (mode == "videopost") {
+		} else if (mode == "videopost" || mode == "vid") {
 			return CT.dom.div([
 				unode,
-				CT.dom.div(p.title, "biggest bold padded"),
-				blog.core.media.video.set(p, CT.dom.div()),
+				CT.dom.div(ptit, "biggest bold padded"),
+				(mode == "vid") ? CT.dom.video("/v/" + p.filename + ".mp4", "w1", null, {
+					controls: true
+				}) : blog.core.media.video.set(p, CT.dom.div()),
 				CT.dom.div(p.blurb, "gray italic blockquote"),
 				cnode
 			], "bordered padded round");

@@ -41,7 +41,7 @@ class PhotoSet(BasePost):
 
 class Comment(db.TimeStampedBase):
 	user = db.ForeignKey() # CTUser, Author, or whatever else
-	post = db.ForeignKey(kinds=["post", "videopost", "photoset"])
+	post = db.ForeignKey(kinds=["post", "videopost", "photoset", "vid"])
 	body = db.Text()
 
 class Vid(db.TimeStampedBase):
@@ -50,3 +50,9 @@ class Vid(db.TimeStampedBase):
 	name = db.String()
 	blurb = db.Text()
 	tags = db.ForeignKey(kind=Tag, repeated=True)
+
+	def comments(self):
+		return Comment.query(Comment.post == self.key).all()
+
+	def beforeremove(self, session):
+		db.delete_multi(self.comments(), session)
