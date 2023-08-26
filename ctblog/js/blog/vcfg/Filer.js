@@ -5,7 +5,16 @@ blog.vcfg.Filer = CT.Class({
 		alert("unimplemented");
 	},
 	upload: function(d) {
-		alert("unimplemented");
+		var reg = this.register, p2n = this.p2n;
+		CT.modal.prompt({
+			prompt: "please select the video",
+			style: "file",
+			cb: function(ctfile) {
+				ctfile.upload("/_blog", ipath => reg(d, p2n(ipath)), {
+					action: "v"
+				});
+			}
+		});
 	},
 	p2n: function(path) {
 		return path.split("/").pop().split(".")[0];
