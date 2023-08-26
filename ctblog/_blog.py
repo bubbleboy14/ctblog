@@ -1,6 +1,6 @@
 import os, random
 from cantools.web import respond, succeed, fail, cgi_get, read_file, clearmem
-from cantools.util import log, write, token, shouldMoveMoov, transcode, thumb
+from cantools.util import log, write, token, shouldMoveMoov, transcode, thumb, dlp
 from cantools.db import edit
 from cantools import config
 from model import db, Comment, Photo, Vid, Tag
@@ -32,9 +32,12 @@ def response():
 			"tagged": [v.data() for v in Vid.query().all()]
 		})
 	if action == "v":
-		fname = cgi_get("data", shield=True) # maybe unnecessary but *shrug*
 		fpath = os.path.join("v", "%s.mp4"%(token(10),))
-		write(read_file(fname), fpath, binary=True)
+		fname = cgi_get("data", required=False)
+		if fname:
+			write(read_file(fname), fpath, binary=True)
+		else:
+			dlp(cgi_get("url"), fpath)
 		shouldMoveMoov(fpath) and transcode(fpath)
 		thumb(fpath, dest="img", forceDest=True)
 		succeed("/%s"%(fpath,))
