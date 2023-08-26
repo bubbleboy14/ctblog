@@ -2,7 +2,20 @@ blog.vcfg.Filer = CT.Class({
 	CLASSNAME: "blog.vcfg.Filer",
 	_: {},
 	xplat: function(d) {
-		alert("unimplemented");
+		var reg = this.register, p2n = this.p2n;
+		CT.modal.prompt({
+			prompt: "what's the url?",
+			cb: function(url) {
+				CT.net.post({
+					path: "/_blog",
+					params: {
+						action: "v",
+						url: url
+					},
+					cb: vpath => reg(d, p2n(vpath))
+				});
+			}
+		});
 	},
 	upload: function(d) {
 		var reg = this.register, p2n = this.p2n;
@@ -10,7 +23,7 @@ blog.vcfg.Filer = CT.Class({
 			prompt: "please select the video",
 			style: "file",
 			cb: function(ctfile) {
-				ctfile.upload("/_blog", ipath => reg(d, p2n(ipath)), {
+				ctfile.upload("/_blog", vpath => reg(d, p2n(vpath)), {
 					action: "v"
 				});
 			}
