@@ -48,7 +48,7 @@ CT.onload(function() {
 	if (pcfg.mode == "basepost" && ["post", "videopost", "photoset"].includes(lochash)) {
 		variety = lochash;
 		lochash = null;
-	} else if (pcfg.tags.includes(lochash)) {
+	} else if (pcfg.tags && pcfg.tags.includes(lochash)) {
 		filters.tags = {
 			comparator: "contains",
 			value: lochash
