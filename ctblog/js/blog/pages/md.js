@@ -124,6 +124,7 @@ var jmenu = function() {
 		jmenu._men = CT.modal.modal(cont, null, {
 			center: false,
 			noClose: true,
+			className: "basicpopup scroller",
 			slide: {
 				origin: "bottomright"
 			}
