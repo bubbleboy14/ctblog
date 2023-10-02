@@ -2,17 +2,15 @@ blog.Scanner = CT.Class({
 	CLASSNAME: "blog.Scanner",
 	_: {},
 	unfimgs: function() {
-		var oz = this.opts, pref = "/img/";
-		if (oz.variety == "video")
-			pref += "v/";
-		return (this._.items || oz.lister()).map(n => pref + n + ".jpg");
+		var pref = "/img/" + (this.vidMode ? "v" : "z") + "/";
+		return (this._.items || this.opts.lister()).map(n => pref + n + ".jpg");
 	},
 	p2n: function(path) {
 		return path.split("/").pop().split(".")[0];
 	},
 	n2p: function(name) {
 		var pref, ext;
-		if (this.opts.variety == "video") {
+		if (this.vidMode) {
 			pref = "/v/";
 			ext = "mp4";
 		} else {
@@ -22,23 +20,24 @@ blog.Scanner = CT.Class({
 		return pref + name + "." + ext;
 	},
 	preview: function(filename) {
-		var _ = this._;
+		var _ = this._, path;
 		if (filename.startsWith("/"))
 			filename = this.p2n(filename);
+		path = this.n2p(filename);
 		if (!_.previewer) {
-			var vid = CT.dom.video({
+			var item = CT.dom[this.vidMode ? "video" : "img"]({
 				className: "wm400p hm400p",
 				controls: true
 			});
-			_.previewer = CT.modal.modal(vid, null, {
+			_.previewer = CT.modal.modal(item, null, {
 				center: false,
 				slide: {
 					origin: "bottomleft"
 				}
 			}, true, true);
-			_.previewer.video = vid;
+			_.previewer.item = item;
 		}
-		_.previewer.video.src = "/v/" + filename + ".mp4";
+		_.previewer.item.src = path;
 		_.previewer.show();
 	},
 	select: function(cb) {
@@ -65,10 +64,11 @@ blog.Scanner = CT.Class({
 		this.opts = opts = CT.merge(opts, {
 			variety: "video" // |image
 		});
+		this.vidMode = opts.variety == "video";
 		if (!opts.lister) {
 			blog.getters[opts.variety + "s"](function(items) {
 				_.items = items.map(fname => fname.split(".")[0]);
-			}, opts.variety == "video" && "all");
+			}, this.vidMode && "all");
 		}
 	}
 });
