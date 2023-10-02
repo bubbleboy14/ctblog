@@ -2,7 +2,7 @@ blog.vcfg.Filer = CT.Class({
 	CLASSNAME: "blog.vcfg.Filer",
 	_: {},
 	xplat: function(d) {
-		var reg = this.register, p2n = this.p2n;
+		var reg = this.register, p2n = this.scanner.p2n;
 		CT.modal.prompt({
 			prompt: "what's the url?",
 			cb: function(url) {
@@ -18,7 +18,7 @@ blog.vcfg.Filer = CT.Class({
 		});
 	},
 	upload: function(d) {
-		var reg = this.register, p2n = this.p2n;
+		var reg = this.register, p2n = this.scanner.p2n;
 		CT.modal.prompt({
 			prompt: "please select the video",
 			style: "file",
@@ -29,36 +29,17 @@ blog.vcfg.Filer = CT.Class({
 			}
 		});
 	},
-	p2n: function(path) {
-		return path.split("/").pop().split(".")[0];
-	},
-	unfiled: function() {
-		return this.vids.map(v => v.split(".")[0]).filter(n => !(n in this.filed));
-	},
-	unfimgs: function() {
-		return this.unfiled().map(n => "/img/v/" + n + ".jpg");
-	},
 	register: function(d, filename) {
 		if (d.filename) // unregister
 			delete this.filed[d.filename];
 		this.filed[filename] = d;
 		this.saver(d, "filename", filename);
 	},
+	unfiled: function() {
+		return this.vids.map(v => v.split(".")[0]).filter(n => !(n in this.filed));
+	},
 	select: function(d) {
-		CT.modal.prompt({
-			prompt: "please select the video",
-			style: "icon",
-			page: 10,
-			data: this.unfimgs(),
-			iclick: this.preview,
-			searchable: "up20 right",
-			className: "basicpopup mosthigh galimg wm1-2i wmin200p",
-			center: false,
-			slide: {
-				origin: "bottomright"
-			},
-			cb: ipath => this.register(d, this.p2n(ipath))
-		});
+		this.scanner.select(d);
 	},
 	edit: function(d) {
 		CT.modal.choice({
@@ -66,26 +47,6 @@ blog.vcfg.Filer = CT.Class({
 			data: ["select", "upload", "xplat"],
 			cb: sel => this[sel](d)
 		});
-	},
-	preview: function(filename) {
-		var _ = this._;
-		if (filename.startsWith("/"))
-			filename = this.p2n(filename);
-		if (!_.previewer) {
-			var vid = CT.dom.video({
-				className: "wm400p hm400p",
-				controls: true
-			});
-			_.previewer = CT.modal.modal(vid, null, {
-				center: false,
-				slide: {
-					origin: "bottomleft"
-				}
-			}, true, true);
-			_.previewer.video = vid;
-		}
-		_.previewer.video.src = "/v/" + filename + ".mp4";
-		_.previewer.show();
 	},
 	files: function(d) {
 		var cont = [
@@ -95,7 +56,7 @@ blog.vcfg.Filer = CT.Class({
 		if (d.filename) {
 			cont.push([
 				CT.dom.div([
-					CT.dom.link("(play)", () => this.preview(d.filename)),
+					CT.dom.link("(play)", () => this.scanner.preview(d.filename)),
 					CT.dom.pad(),
 					CT.dom.span(d.filename, "bold"),
 					CT.dom.pad(),
@@ -118,6 +79,10 @@ blog.vcfg.Filer = CT.Class({
 		this.vids = opts.vids;
 		this.saver = opts.saver;
 		this.tagged = opts.tagged;
+		this.scanner = new blog.Scanner({
+			cb: this.register,
+			lister: this.unfiled
+		});
 		this.file();
 	}
 });
