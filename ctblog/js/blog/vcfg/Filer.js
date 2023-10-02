@@ -1,6 +1,5 @@
 blog.vcfg.Filer = CT.Class({
 	CLASSNAME: "blog.vcfg.Filer",
-	_: {},
 	xplat: function(d) {
 		var reg = this.register, p2n = this.scanner.p2n;
 		CT.modal.prompt({
@@ -39,7 +38,7 @@ blog.vcfg.Filer = CT.Class({
 		return this.vids.map(v => v.split(".")[0]).filter(n => !(n in this.filed));
 	},
 	select: function(d) {
-		this.scanner.select(d);
+		this.scanner.select(name => this.register(d, name));
 	},
 	edit: function(d) {
 		CT.modal.choice({
@@ -80,7 +79,6 @@ blog.vcfg.Filer = CT.Class({
 		this.saver = opts.saver;
 		this.tagged = opts.tagged;
 		this.scanner = new blog.Scanner({
-			cb: this.register,
 			lister: this.unfiled
 		});
 		this.file();

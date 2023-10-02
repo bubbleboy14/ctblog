@@ -2,10 +2,24 @@ blog.Scanner = CT.Class({
 	CLASSNAME: "blog.Scanner",
 	_: {},
 	unfimgs: function() {
-		return this.opts.lister().map(n => "/img/v/" + n + ".jpg");
+		var oz = this.opts, pref = "/img/";
+		if (oz.variety == "video")
+			pref += "v/";
+		return (this._.items || oz.lister()).map(n => pref + n + ".jpg");
 	},
 	p2n: function(path) {
 		return path.split("/").pop().split(".")[0];
+	},
+	n2p: function(name) {
+		var pref, ext;
+		if (this.opts.variety == "video") {
+			pref = "/v/";
+			ext = "mp4";
+		} else {
+			pref = "/img/z/";
+			ext = "jpg";
+		}
+		return pref + name + "." + ext;
 	},
 	preview: function(filename) {
 		var _ = this._;
@@ -27,9 +41,9 @@ blog.Scanner = CT.Class({
 		_.previewer.video.src = "/v/" + filename + ".mp4";
 		_.previewer.show();
 	},
-	select: function(d) {
+	select: function(cb) {
 		CT.modal.prompt({
-			prompt: "please select the video",
+			prompt: "please select the " + this.opts.variety,
 			style: "icon",
 			page: 10,
 			data: this.unfimgs(),
@@ -40,12 +54,21 @@ blog.Scanner = CT.Class({
 			slide: {
 				origin: "bottomright"
 			},
-			cb: ipath => this.opts.cb(d, this.p2n(ipath))
+			cb: ipath => (cb || this.log)(this.p2n(ipath))
 		});
 	},
+	nav: function() {
+		this.select(name => window.open(this.n2p(name), "_blank"));
+	},
 	init: function(opts) {
-		this.opts = CT.merge(opts, { // required: cb(), lister()
+		var _ = this._;
+		this.opts = opts = CT.merge(opts, {
 			variety: "video" // |image
 		});
+		if (!opts.lister) {
+			blog.getters[opts.variety + "s"](function(items) {
+				_.items = items.map(fname => fname.split(".")[0]);
+			}, opts.variety == "video" && "all");
+		}
 	}
 });

@@ -9,12 +9,10 @@ blog.vcfg.Browser = CT.Class({
 			eopts.owner = d.owner;
 			eopts.modelName = d.modelName;
 		}
-		blog.vcfg.util.vz(function(upd) {
+		blog.getters.videos(function(upd) {
 			edited(d, upd);
 			Object.assign(d, upd);
-		}, {
-			vinfo: eopts
-		});
+		}, null, eopts);
 	},
 	blurber: function(d) {
 		return CT.dom.smartField({

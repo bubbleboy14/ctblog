@@ -7,10 +7,14 @@ blog.getters = {
 			eb: eb
 		});
 	},
-	videos: function(cb, eb, vinfo) {
+	videos: function(cb, subset, vinfo, eb) {
 		var params = { action: "vz" };
 		if (vinfo)
 			params.vinfo = vinfo;
+		if (subset) {
+			var realCb = cb;
+			cb = vz => realCb(vz[subset]);
+		}
 		blog.getters._get(cb, params, eb);
 	},
 	images: function(cb, eb) {
