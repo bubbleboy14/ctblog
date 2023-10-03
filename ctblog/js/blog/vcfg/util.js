@@ -1,31 +1,18 @@
 blog.vcfg.util = {
 	_: {
 		tag: function(cb) {
-			var bvu = blog.vcfg.util, _ = bvu._;
+			var _ = blog.vcfg.util._;
 			CT.modal.prompt({
 				prompt: "ok, what's the tag?",
 				cb: function(tname) {
-					bvu.vz(function(tdata) {
+					blog.getters.tag(name, function(tdata) {
 						CT.data.add(tdata);
 						_.tags.push(tdata);
 						cb();
-					}, {
-						action: "tz",
-						name: tname
 					}, cb);
 				}
 			})
 		}
-	},
-	vz: function(cb, params, eb) {
-		CT.net.post({
-			path: "/_blog",
-			params: CT.merge(params, {
-				action: "vz"
-			}),
-			cb: cb,
-			eb: eb
-		});
 	},
 	tag: function(d, cb) {
 		var bvu = blog.vcfg.util, _ = bvu._;
@@ -51,7 +38,7 @@ blog.vcfg.util = {
 		var bvu = blog.vcfg.util, _ = bvu._;
 		CT.db.get("tag", function(tags) {
 			_.tags = tags;
-			bvu.vz(bvu.build);
+			blog.getters.videos(bvu.build);
 		});
 	}
 };
