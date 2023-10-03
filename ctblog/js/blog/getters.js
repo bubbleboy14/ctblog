@@ -17,9 +17,10 @@ blog.getters = {
 		}
 		blog.getters._get(cb, params, eb);
 	},
-	images: function(cb, eb) {
+	images: function(cb, count, eb) {
 		blog.getters._get(cb, {
-			action: "imgz"
+			action: "imgz",
+			count: count || 9999
 		}, eb);
 	},
 	tag: function(name, cb, eb) {
