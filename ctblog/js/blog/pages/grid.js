@@ -16,20 +16,13 @@ var vid = function(v) {
 		className: "h200p inline-block"
 	}));
 };
-var refill = function(num) { // TODO : use blog.getters.images() ; count???
+var refill = function(num) {
 	num = num || 10;
 	if (mode == "i") {
-		CT.net.post({
-			path: "/_blog",
-			params: {
-				action: "imgz",
-				count: num
-			},
-			cb: function(iz) {
-				iz.map(i => CT.dom.addContent(cont,
-					CT.dom.img("/img/z/" + i, "h200p")))
-			}
-		});
+		blog.getters.images(function(iz) {
+			iz.map(i => CT.dom.addContent(cont,
+				CT.dom.img("/img/z/" + i, "h200p")));
+		}, num);
 	} else
 		for (var i = 0; i < num; i++)
 			blog.ranvid.get(vid);
