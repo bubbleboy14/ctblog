@@ -44,7 +44,7 @@ var miniMenu = function() {
 		CT.dom.link(othervar, swapMode),
 		CT.dom.span("|"),
 		CT.dom.link("scan", scanner.nav)
-	], "abs cbr");
+	], "fixed cbr pr10");
 };
 
 CT.onload(function() {
