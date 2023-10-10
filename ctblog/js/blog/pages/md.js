@@ -139,10 +139,17 @@ var jumpers = function() {
 };
 
 var h2fix = function(n) {
-	if (!n.children.length) return;
-	var realH2 = CT.dom.node(n.lastChild.data, "h2");
-	n.lastChild.remove();
-	n.replaceWith(CT.dom.div([CT.dom.div(n.innerHTML), realH2]));
+	var cont = [], realH2, notblock = n.parentNode.className != "big blockquote";
+//	console.log(n.lastChild.data);
+	if (notblock && !n.children.length) return;
+//	console.log("PROCESSING", n.children.length, n.parentNode.className);
+	if (n.children.length && notblock) {
+		realH2 = CT.dom.node(n.lastChild.data, "h2");
+		n.lastChild.remove();
+	}
+	cont.push(CT.dom.div(n.innerHTML));
+	realH2 && cont.push(realH2);
+	n.replaceWith(CT.dom.div(cont));
 };
 
 CT.onload(function() {
