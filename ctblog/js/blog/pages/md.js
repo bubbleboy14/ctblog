@@ -77,21 +77,42 @@ var exper = function(label, node) {
 	return enode;
 };
 
+var chaps = {};
+
+var scroll2chap = function(name, noecho) {
+	if (!chaps[name]) return console.log("chapter not found:", name);
+	chaps[name].scrollIntoView({
+		behavior: "smooth"
+	});
+	noecho || setTimeout(() => scroll2chap(name, true), 1000);
+};
+
+var clipsec = function(chap) {
+	var l = location, b = l.protocol + "//" + l.hostname + l.pathname,
+		u = b + "?n=" + CT.info.query.n;
+	if (chap)
+		u += "&c=" + escape(chap);
+	CT.clipboard(u);
+};
+
 var jtoclink = function(h2node) {
-	return CT.dom.link(h2node.innerHTML, function() {
-		h2node.scrollIntoView({
-			behavior: "smooth"
-		});
-	}, null, "hoverglow pointer block");
+	var name = h2node.innerHTML;
+	chaps[name] = h2node;
+	h2node.classList.add("pointer");
+	h2node.onclick = () => clipsec(name);
+	return CT.dom.link(name, () => scroll2chap(name),
+		null, "hoverglow pointer block");
 };
 
 var jtoc = function() {
-	var tnode = CT.dom.tag("h1").pop(), toc;
+	var tnode = CT.dom.tag("h1").pop(), toc, topper;
 	if (!tnode) return;
 	toc = CT.dom.div(CT.dom.tag("h2").map(jtoclink));
+	topper = CT.dom.div(tnode.innerHTML, "big pointer");
+	topper.onclick = () => clipsec();
 	return CT.dom.div([
 		exper("page [toc]", toc),
-		CT.dom.div(tnode.innerHTML, "big"),
+		topper,
 		toc
 	], "bottommargined");
 };
@@ -115,25 +136,26 @@ var jnav = function() {
 	return [CT.dom.div(exper("site [nav]", n), "right italic"), n];
 };
 
+var loadjmenu = function() {
+	var cont = [];
+	mcfg.toc && cont.push(jtoc());
+	mcfg.nav && cont.push(jnav());
+	jmenu._men = CT.modal.modal(cont, null, {
+		center: false,
+		noClose: true,
+		className: "basicpopup scroller",
+		slide: {
+			origin: "bottomright"
+		}
+	}, true, true);
+};
+
 var jmenu = function() {
-	var cont;
-	if (!jmenu._men) {
-		cont = [];
-		mcfg.toc && cont.push(jtoc());
-		mcfg.nav && cont.push(jnav());
-		jmenu._men = CT.modal.modal(cont, null, {
-			center: false,
-			noClose: true,
-			className: "basicpopup scroller",
-			slide: {
-				origin: "bottomright"
-			}
-		}, true, true);
-	}
 	jmenu._men.show();
 };
 
 var jumpers = function() {
+	loadjmenu();
 	CT.dom.addBody(CT.dom.link("jump", jmenu, null,
 		"abs cbr big bold padded margined hoverglow grayback-trans round right20"));
 };
@@ -155,11 +177,12 @@ var h2fix = function(n) {
 CT.onload(function() {
 	CT.initCore();
 	mcfg.video && CT.parse.enableVideo();
-	var h = location.hash.slice(1);
+	var q = CT.info.query, h = q.n || location.hash.slice(1), c = q.c;
 	fetch("/md/" + h + ".md").then(d => d.text()).then(function(text) {
 		if (text.startsWith("<b>404</b>"))
 			CT.dom.setMain(CT.dom.div("can't find it!", "centered"));
 		else {
+			document.head.getElementsByTagName("title")[0].innerHTML = h;
 			blog.view.simple(h);
 			CT.dom.setMain(CT.parse.process(proc(text)));
 			CT.dom.tag("iframe").forEach(ytFix);
@@ -169,5 +192,6 @@ CT.onload(function() {
 			charts();
 		}
 		(mcfg.toc || mcfg.nav) && jumpers();
+		c && scroll2chap(unescape(c));
 	});
 });
