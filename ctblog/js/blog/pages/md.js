@@ -83,7 +83,7 @@ var scroll2chap = function(name) {
 	var n = chaps[name], f;
 	if (!n) return console.log("chapter not found:", name);
 	f = function() {
-		node.scrollIntoView({
+		n.scrollIntoView({
 			behavior: "smooth"
 		});
 	};
