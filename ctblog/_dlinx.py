@@ -1,4 +1,3 @@
-import html
 from cantools.web import respond, cgi_get, metize
 from cantools.util import read
 
@@ -8,7 +7,7 @@ def striplinx(s):
 		start = s.index("[")
 		end = s.index(")", mid)
 		s = s[:start] + s[start + 1:mid] + s[end + 1:]
-	return html.escape("%s..."%(s.strip(".,;:"),))
+	return "%s..."%(s.strip(".,;:").replace('"', "'"),)
 
 def mextract(p, markup):
 	if p == "/blog/md.html":
@@ -18,7 +17,7 @@ def mextract(p, markup):
 		metas = {}
 		metas["name"] = pars.pop(0)
 		if chap:
-			metas["name"] += " |%s"%(html.escape(chap),)
+			metas["name"] += " |%s"%(chap.replace('"', "'"),)
 			chap = chap.strip()
 			line = pars.pop(0)
 			while line != chap:
