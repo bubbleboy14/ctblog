@@ -23,6 +23,14 @@ def metize(m):
 	b = m["blurb"]
 	return METS%(n, n, i, i, b, b, b)
 
+def striplinx(s):
+	while "](" in s:
+		mid = s.index("](")
+		start = s.index("[")
+		end = s.index(")", mid)
+		s = s[:start] + s[start + 1:mid] + s[end + 1:]
+	return "%s..."%(s.strip(".,;:"),)
+
 def response():
 	qs = local("request_string") # better key?
 	p = local("response").request.url
@@ -48,7 +56,7 @@ def response():
 				while line != chap:
 					line = pars.pop(0)
 			pars.pop(0) # underline
-			metas["blurb"] = pars.pop(0) or pars.pop(0)
+			metas["blurb"] = striplinx(pars.pop(0) or pars.pop(0))
 			for par in pars:
 				if par.startswith("https://"):
 					metas["image"] = par
