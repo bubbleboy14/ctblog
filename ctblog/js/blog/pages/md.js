@@ -155,7 +155,7 @@ var h2fix = function(n) {
 CT.onload(function() {
 	CT.initCore();
 	mcfg.video && CT.parse.enableVideo();
-	var h = location.hash.slice(1);
+	var h = CT.info.query.n || location.hash.slice(1);
 	fetch("/md/" + h + ".md").then(d => d.text()).then(function(text) {
 		if (text.startsWith("<b>404</b>"))
 			CT.dom.setMain(CT.dom.div("can't find it!", "centered"));
