@@ -99,7 +99,7 @@ var clipsec = function(chap) {
 	var l = location, b = l.protocol + "//" + l.hostname + l.pathname,
 		u = b + "?n=" + CT.info.query.n;
 	if (chap)
-		u += "&c=" + escape(chap);
+		u += "&c=" + encodeURIComponent(chap);
 	CT.clipboard(u);
 };
 
@@ -199,6 +199,6 @@ CT.onload(function() {
 			charts();
 		}
 		(mcfg.toc || mcfg.nav) && jumpers();
-		c && scroll2chap(unescape(c));
+		c && scroll2chap(c);
 	});
 });
