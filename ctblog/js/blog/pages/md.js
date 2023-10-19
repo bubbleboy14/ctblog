@@ -79,12 +79,17 @@ var exper = function(label, node) {
 
 var chaps = {};
 
-var scroll2chap = function(name, noecho) {
-	if (!chaps[name]) return console.log("chapter not found:", name);
-	chaps[name].scrollIntoView({
-		behavior: "smooth"
-	});
-	noecho || setTimeout(() => scroll2chap(name, true), 1000);
+var scroll2chap = function(name) {
+	var n = chaps[name], f;
+	if (!n) return console.log("chapter not found:", name);
+	f = function() {
+		node.scrollIntoView({
+			behavior: "smooth"
+		});
+	};
+	f();
+	setTimeout(f, 1000);
+	setTimeout(f, 2000);
 };
 
 var clipsec = function(chap) {
