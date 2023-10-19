@@ -90,6 +90,7 @@ var scroll2chap = function(name) {
 	f();
 	setTimeout(f, 1000);
 	setTimeout(f, 2000);
+	setTimeout(f, 3000);
 };
 
 var clipsec = function(chap) {
