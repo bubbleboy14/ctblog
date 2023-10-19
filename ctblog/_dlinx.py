@@ -17,7 +17,7 @@ def mextract(p, markup):
 		metas = {}
 		metas["name"] = pars.pop(0)
 		if chap:
-			chap = chap.replace("+", " ").strip()
+			chap = chap.replace("+", " ").replace('"', "'").strip()
 			metas["name"] += " | %s"%(chap,)
 			line = pars.pop(0)
 			while line != chap:
