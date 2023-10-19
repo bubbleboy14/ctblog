@@ -11,7 +11,7 @@ def striplinx(s):
 
 def mextract(p, markup):
 	if p == "/blog/md.html":
-		chap = cgi_get("c", required=False, decode=True)
+		chap = cgi_get("c", required=False, decode=True).replace("+", " ")
 		md = read("md/%s.md"%(cgi_get("n"),))
 		pars = md.split("\n")
 		metas = {}
