@@ -26,6 +26,8 @@ def mextract(p, markup):
 		metas["blurb"] = striplinx(pars.pop(0) or pars.pop(0))
 		for par in pars:
 			if par.startswith("https://"):
+				if "youtube.com" in par:
+					par = "https://img.youtube.com/vi/%s/0.jpg"%(par.split("?v=")[1],)
 				metas["image"] = par
 				break
 		print("\ndlinx metas:", metas, "\n\n")
