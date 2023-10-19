@@ -87,9 +87,12 @@ var scroll2chap = function(name, noecho) {
 	noecho || setTimeout(() => scroll2chap(name, true), 1000);
 };
 
-var clipsec = function(name) {
-	var l = location, b = l.protocol + "//" + l.hostname + l.pathname;
-	CT.clipboard(b + "?n=" + CT.info.query.n + "&c=" + escape(name));
+var clipsec = function(chap) {
+	var l = location, b = l.protocol + "//" + l.hostname + l.pathname,
+		u = b + "?n=" + CT.info.query.n;
+	if (chap)
+		u += "&c=" + escape(chap);
+	CT.clipboard(u);
 };
 
 var jtoclink = function(h2node) {
@@ -102,12 +105,14 @@ var jtoclink = function(h2node) {
 };
 
 var jtoc = function() {
-	var tnode = CT.dom.tag("h1").pop(), toc;
+	var tnode = CT.dom.tag("h1").pop(), toc, topper;
 	if (!tnode) return;
 	toc = CT.dom.div(CT.dom.tag("h2").map(jtoclink));
+	topper = CT.dom.div(tnode.innerHTML, "big pointer");
+	topper.onclick = () => clipsec();
 	return CT.dom.div([
 		exper("page [toc]", toc),
-		CT.dom.div(tnode.innerHTML, "big"),
+		topper,
 		toc
 	], "bottommargined");
 };
