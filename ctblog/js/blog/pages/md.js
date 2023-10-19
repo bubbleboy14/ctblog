@@ -177,6 +177,7 @@ CT.onload(function() {
 		if (text.startsWith("<b>404</b>"))
 			CT.dom.setMain(CT.dom.div("can't find it!", "centered"));
 		else {
+			document.head.getElementsByTagName("title")[0].innerHTML = h;
 			blog.view.simple(h);
 			CT.dom.setMain(CT.parse.process(proc(text)));
 			CT.dom.tag("iframe").forEach(ytFix);
