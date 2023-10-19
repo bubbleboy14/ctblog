@@ -11,14 +11,14 @@ def striplinx(s):
 
 def mextract(p, markup):
 	if p == "/blog/md.html":
-		chap = cgi_get("c", required=False, decode=True).replace("+", " ")
+		chap = cgi_get("c", required=False, decode=True)
 		md = read("md/%s.md"%(cgi_get("n"),))
 		pars = md.split("\n")
 		metas = {}
 		metas["name"] = pars.pop(0)
 		if chap:
-			metas["name"] += " |%s"%(chap,)
-			chap = chap.strip()
+			chap = chap.replace("+", " ").strip()
+			metas["name"] += " | %s"%(chap,)
 			line = pars.pop(0)
 			while line != chap:
 				line = pars.pop(0)
