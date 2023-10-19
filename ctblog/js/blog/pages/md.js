@@ -91,6 +91,8 @@ var scroll2chap = function(name) {
 	setTimeout(f, 1000);
 	setTimeout(f, 2000);
 	setTimeout(f, 3000);
+	setTimeout(f, 4000);
+	setTimeout(f, 5000);
 };
 
 var clipsec = function(chap) {
