@@ -36,10 +36,17 @@ def response():
 		metas = None
 		markup = filestore.read(fp)[0].decode()
 		if p == "/blog/md.html":
+			chap = cgi_get("c", required=False, decode=True)
 			md = read("md/%s.md"%(cgi_get("n"),))
 			pars = md.split("\n")
 			metas = {}
 			metas["name"] = pars.pop(0)
+			if chap:
+				metas["name"] += " |%s"%(chap,)
+				chap = chap.strip()
+				line = pars.pop(0)
+				while line != chap:
+					line = pars.pop(0)
 			pars.pop(0) # underline
 			metas["blurb"] = pars.pop(0) or pars.pop(0)
 			for par in pars:
