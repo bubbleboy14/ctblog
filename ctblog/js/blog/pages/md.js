@@ -119,8 +119,7 @@ var jtoc = function() {
 
 var jnavlink = function(name) {
 	return CT.dom.link(name, function() {
-		location = "/blog/md.html#" + name;
-		location.reload();
+		location = "/blog/md.html?n=" + name;
 	}, null, "hoverglow pointer block");;
 };
 
