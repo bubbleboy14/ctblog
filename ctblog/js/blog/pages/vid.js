@@ -5,6 +5,6 @@ CT.require("blog.core");
 
 CT.onload(function() {
 	CT.initCore();
-	CT.db.one(decodeURIComponent(document.location.hash.slice(1)),
+	CT.db.one(decodeURIComponent(CT.info.query.v || document.location.hash.slice(1)),
 		p => CT.dom.setMain(blog.core.util.post(p)));
 });

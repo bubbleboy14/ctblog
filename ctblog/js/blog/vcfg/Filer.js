@@ -59,7 +59,7 @@ blog.vcfg.Filer = CT.Class({
 					CT.dom.pad(),
 					CT.dom.span(d.filename, "bold"),
 					CT.dom.pad(),
-					CT.dom.link("(view)", null, "/blog/vid.html#" + d.key)
+					CT.dom.link("(view)", null, "/blog/vid.html?v=" + encodeURIComponent(d.key))
 				], "centered up30"),
 				CT.dom.img("/img/v/" + d.filename + ".jpg", "w1")
 			]);
