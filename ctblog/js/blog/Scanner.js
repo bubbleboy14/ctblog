@@ -28,8 +28,11 @@ blog.Scanner = CT.Class({
 			var item = CT.dom[this.vidMode ? "video" : "img"]({
 				className: "wm400p hm400p",
 				controls: true
-			});
-			_.previewer = CT.modal.modal(item, null, {
+			}), clip = () => CT.clipboard(item.src);
+			_.previewer = CT.modal.modal([
+				item,
+				CT.dom.button("copy link", clip, "w1 centered block")
+			], null, {
 				center: false,
 				slide: {
 					origin: "bottomleft"
