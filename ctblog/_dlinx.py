@@ -1,5 +1,6 @@
 from cantools.web import respond, cgi_get, metize, text2image
 from cantools.util import read
+from model import db
 
 def striplinx(s):
 	while "](" in s:
@@ -27,6 +28,13 @@ def mextract(p, markup):
 		metas["image"] = text2image(pars)
 		print("\ndlinx metas:", metas, "\n\n")
 		return metas
+	if p == "/blog/vid.html":
+		v = db.get(cgi_get("v", decode=True))
+		return {
+			"name": v.name,
+			"blurb": v.blurb.strip(),
+			"image": v.thumbnail()
+		}
 
 def response():
 	metize(mextract)
