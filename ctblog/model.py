@@ -51,6 +51,10 @@ class Vid(db.TimeStampedBase):
 	blurb = db.Text()
 	tags = db.ForeignKey(kind=Tag, repeated=True)
 
+	def thumbnail(self):
+		from cantools import config
+		return "https://%s/img/v/%s.jpg"%(config.web.domain, self.filename)
+
 	def comments(self):
 		return Comment.query(Comment.post == self.key).all()
 
