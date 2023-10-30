@@ -42,8 +42,7 @@ var setSlide = function(collection, frameCb) {
 	});
 };
 
-CT.onload(function() {
-	CT.initCore();
+var initPage = function() {
 	var variety, filters = {};
 	if (pcfg.mode == "basepost" && ["post", "videopost", "photoset"].includes(lochash)) {
 		variety = lochash;
@@ -93,4 +92,15 @@ CT.onload(function() {
 			CT.dom.setContent("ctmain", posts.map(blog.view.viewable));
 		bcfg.searcher && blog.core.util.searcher();
 	}, true, false, variety, filters);
+};
+
+CT.onload(function() {
+	var q = CT.info.query;
+	CT.initCore();
+	if (!q.i)
+		return initPage();
+	CT.db.index(parseInt(q.i), pcfg.mode, function(pdata) {
+		lochash = pdata.key;
+		initPage();
+	});
 });
