@@ -70,7 +70,7 @@ class Vid(db.TimeStampedBase):
 	tags = db.ForeignKey(kind=Tag, repeated=True)
 
 	def thumbnail(self):
-		return thumb(self.filename, ext="jpg")
+		return thumb("/img/v/%s"%(self.filename,), ext="jpg")
 
 	def comments(self):
 		return Comment.query(Comment.post == self.key).all()
