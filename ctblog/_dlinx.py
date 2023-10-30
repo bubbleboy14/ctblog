@@ -1,6 +1,9 @@
 from cantools.web import respond, cgi_get, metize, text2image
 from cantools.util import read
-from model import db
+from model import db, BasePost
+
+def tagprep(s, strips=None):
+	return s.replace("\n", " ").replace('"', "'").strip(strips)
 
 def striplinx(s):
 	while "](" in s:
@@ -8,7 +11,7 @@ def striplinx(s):
 		start = s.index("[")
 		end = s.index(")", mid)
 		s = s[:start] + s[start + 1:mid] + s[end + 1:]
-	return "%s..."%(s.strip(".,;:").replace('"', "'"),)
+	return "%s..."%(tagprep(s, " .,;:"),)
 
 def mextract(p, markup):
 	if p == "/blog/md.html":
@@ -19,7 +22,7 @@ def mextract(p, markup):
 		metas["name"] = pars.pop(0)
 		if chap:
 			chap = chap.replace("+", " ").strip()
-			metas["name"] += " | %s"%(chap.replace('"', "'"),)
+			metas["name"] += " | %s"%(tagprep(chap),)
 			line = pars.pop(0)
 			while line != chap:
 				line = pars.pop(0)
@@ -32,8 +35,15 @@ def mextract(p, markup):
 		v = db.get(cgi_get("v", decode=True))
 		return {
 			"name": v.name,
-			"blurb": v.blurb.strip(),
+			"blurb": tagprep(v.blurb),
 			"image": v.thumbnail()
+		}
+	if p == "/blog":
+		post = BasePost.query(BasePost.index == int(cgi_get("i"))).get()
+		return {
+			"name": post.title,
+			"blurb": tagprep(post.blurb),
+			"image": post.thumbnail()
 		}
 
 def response():
