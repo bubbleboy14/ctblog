@@ -1,5 +1,14 @@
 from cantools import db
 from ctuser.model import CTUser, Tag
+from cantools import config
+
+def thumb(path, ext=None):
+	wcfg = config.web
+	if not path:
+		return
+	if ext:
+		path = "%s.%s"%(path, ext)
+	return "%s://%s%s"%(wcfg.proto or "http", wcfg.domain, path)
 
 class Author(CTUser):
 	cc = db.JSON() # carecoin {person,membership}
@@ -27,9 +36,15 @@ class Post(BasePost):
 	img = db.Binary()	
 	body = db.Text()
 
+	def thumbnail(self):
+		return thumb(self.img.urlsafe())
+
 class VideoPost(BasePost): # rename this, simplify code, migrate old dbs?
 	video = db.Binary()
 	poster = db.Binary()
+
+	def thumbnail(self):
+		return thumb(self.poster.urlsafe())
 
 class Photo(db.TimeStampedBase):
 	img = db.Binary()
@@ -38,6 +53,9 @@ class Photo(db.TimeStampedBase):
 
 class PhotoSet(BasePost):
 	photos = db.ForeignKey(repeated=True, kind=Photo)
+
+	def thumbnail(self):
+		return thumb(self.photos[0].get().img.urlsafe())
 
 class Comment(db.TimeStampedBase):
 	user = db.ForeignKey() # CTUser, Author, or whatever else
@@ -52,8 +70,7 @@ class Vid(db.TimeStampedBase):
 	tags = db.ForeignKey(kind=Tag, repeated=True)
 
 	def thumbnail(self):
-		from cantools import config
-		return "https://%s/img/v/%s.jpg"%(config.web.domain, self.filename)
+		return thumb(self.filename, ext="jpg")
 
 	def comments(self):
 		return Comment.query(Comment.post == self.key).all()
