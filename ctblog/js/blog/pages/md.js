@@ -71,7 +71,7 @@ var charts = function() {
 var hlfix = function(atag) {
 	atag.onclick = function() {
 		location = atag.href;
-		location.reload();
+		atag.href.includes("#") && location.reload();
 	}
 };
 
