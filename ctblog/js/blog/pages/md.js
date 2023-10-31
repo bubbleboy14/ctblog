@@ -21,7 +21,7 @@ var proc = function(text) {
 	var stag, etag, srep, erep = "</span>";
 	if (mcfg.poetry)
 		text = poetrize(text);
-	for (color of ["red", "green", "blue", "purple", "yellow", "magenta"]) {
+	for (color of ["red", "green", "blue", "yellow", "purple", "magenta"]) {
 		stag = "*" + color;
 		etag = "*end" + color;
 		srep = "<span style='color:" + color + ";'>";
