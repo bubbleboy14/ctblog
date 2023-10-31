@@ -18,8 +18,16 @@ var poetrize = function(text) {
 	return text.split("\n").map(poLine).join("\n").slice(0, -1);
 };
 var proc = function(text) {
+	var stag, etag, srep, erep = "</span>";
 	if (mcfg.poetry)
 		text = poetrize(text);
+	for (color of ["red", "green", "blue", "purple", "yellow", "magenta"]) {
+		stag = "*" + color;
+		etag = "*end" + color;
+		srep = "<span style='color:" + color + ";'>";
+		while (text.includes(stag))
+			text = text.replace(stag, srep).replace(etag, erep);
+	}
 	return marked.marked(text.replace(/\n\n"""\n/g,
 		"<div class='big blockquote'>").replace(/\n"""\n\n/g, "</div>").replace(/\n\n'''\n/g,
 		"<div class='big blockquote bottommargined up30 noflow hoverglow hmaxtrans hm0'>").replace(/\n'''\n\n/g,
