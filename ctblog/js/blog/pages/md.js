@@ -22,8 +22,8 @@ var proc = function(text) {
 	if (mcfg.poetry)
 		text = poetrize(text);
 	for (color of ["red", "green", "blue", "yellow", "purple", "magenta"]) {
-		stag = "*" + color;
-		etag = "*end" + color;
+		stag = "!" + color + "!";
+		etag = "!no" + color + "!";
 		srep = "<span style='color:" + color + ";'>";
 		while (text.includes(stag))
 			text = text.replace(stag, srep).replace(etag, erep);
