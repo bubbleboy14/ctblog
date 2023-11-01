@@ -2,7 +2,7 @@ from cantools import db
 from ctuser.model import CTUser, Tag
 from cantools import config
 
-def thumb(path, ext=None):
+def thumbnail(path, ext=None):
 	wcfg = config.web
 	if not path:
 		return
@@ -37,14 +37,14 @@ class Post(BasePost):
 	body = db.Text()
 
 	def thumbnail(self):
-		return thumb(self.img.urlsafe())
+		return thumbnail(self.img.urlsafe())
 
 class VideoPost(BasePost): # rename this, simplify code, migrate old dbs?
 	video = db.Binary()
 	poster = db.Binary()
 
 	def thumbnail(self):
-		return thumb(self.poster.urlsafe())
+		return thumbnail(self.poster.urlsafe())
 
 class Photo(db.TimeStampedBase):
 	img = db.Binary()
@@ -55,7 +55,7 @@ class PhotoSet(BasePost):
 	photos = db.ForeignKey(repeated=True, kind=Photo)
 
 	def thumbnail(self):
-		return thumb(self.photos[0].get().img.urlsafe())
+		return thumbnail(self.photos[0].get().img.urlsafe())
 
 class Comment(db.TimeStampedBase):
 	user = db.ForeignKey() # CTUser, Author, or whatever else
@@ -70,7 +70,7 @@ class Vid(db.TimeStampedBase):
 	tags = db.ForeignKey(kind=Tag, repeated=True)
 
 	def thumbnail(self):
-		return thumb("/img/v/%s"%(self.filename,), ext="jpg")
+		return thumbnail("/img/v/%s"%(self.filename,), ext="jpg")
 
 	def comments(self):
 		return Comment.query(Comment.post == self.key).all()
