@@ -31,7 +31,8 @@ var proc = function(text) {
 	return marked.marked(text.replace(/\n\n"""\n/g,
 		"<div class='big blockquote'>").replace(/\n"""\n\n/g, "</div>").replace(/\n\n'''\n/g,
 		"<div class='big blockquote bottommargined up30 noflow hoverglow hmaxtrans hm0'>").replace(/\n'''\n\n/g,
-		"</div>").replace(/\n\n;;;\n/g, "<div class='mdchart'>").replace(/\n;;;\n\n/g, "</div>"));
+		"</div>").replace(/\n\n;;;\n/g, "<div class='mdchart'>").replace(/\n;;;\n\n/g,
+		"</div>").replace(/\n\nttt\n/g, "<div class='mdtimeline'>").replace(/\nttt\n\n/g, "</div>"));
 };
 
 var ytFix = function(iframe) {
@@ -66,6 +67,22 @@ var charts = function() {
 	CT.scriptImport("https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js", function() {
 		cz.forEach(buildChart);
 	});
+};
+var buildTimeline = function(n) {
+	var bar, line, parts, bars = [], lines = n.innerHTML.split("   ").slice(1);
+	for (line of lines) {
+		parts = line.split(" ");
+		bar = {};
+		bar.color = parts.shift();
+		bar.width = parseInt(parts.shift());
+		bar.start = parseInt(parts.shift());
+		bar.name = parts.join(" ");
+		bars.push(bar);
+	}
+	CT.dom.setContent(n, CT.dom.timeline(bars));
+};
+var timelines = function() {
+	CT.dom.className("mdtimeline").forEach(buildTimeline);
 };
 
 var hlfix = function(atag) {
@@ -104,7 +121,7 @@ var scroll2chap = function(name) {
 };
 
 var clipsec = function(chap) {
-	var l = location, b = l.protocol + "//" + l.hostname + l.pathname,
+	var l = location, b = l.protocol + "//" + l.host + l.pathname,
 		u = b + "?n=" + CT.info.query.n;
 	if (chap)
 		u += "&c=" + encodeURIComponent(chap);
@@ -205,6 +222,7 @@ CT.onload(function() {
 			CT.dom.className("hmaxtrans").forEach(expando);
 			CT.dom.tag("h2").forEach(h2fix);
 			charts();
+			timelines();
 		}
 		(mcfg.toc || mcfg.nav) && jumpers();
 		c && scroll2chap(c);
