@@ -69,17 +69,33 @@ var charts = function() {
 	});
 };
 var buildTimeline = function(n) {
-	var bar, line, parts, bars = [], lines = n.innerHTML.split("   ").slice(1);
+	var line, parts, start, shift, pshift, pin, bar, pins = [],
+		bars = [], lines = n.innerHTML.split("   ").slice(1);
 	for (line of lines) {
 		parts = line.split(" ");
-		bar = {};
-		bar.color = parts.shift();
-		bar.width = parseInt(parts.shift());
-		bar.start = parseInt(parts.shift());
-		bar.name = parts.join(" ");
-		bars.push(bar);
+		start = parts[0];
+		if (start == "shift") {
+			parts.shift();
+			shift = parseInt(parts.shift());
+			if (parts.length)
+				pshift = parseInt(parts.shift());
+		} else if (start == "pin") {
+			pin = {};
+			parts.shift();
+			pin.date = parseInt(parts.shift());
+			pin.icon = parts.shift();
+			pin.name = parts.join(" ");
+			pins.push(pin);
+		} else {
+			bar = {};
+			bar.color = parts.shift();
+			bar.width = parseInt(parts.shift());
+			bar.start = parseInt(parts.shift());
+			bar.name = parts.join(" ");
+			bars.push(bar);
+		}
 	}
-	CT.dom.setContent(n, CT.dom.timeline(bars));
+	CT.dom.setContent(n, CT.dom.timeline(bars, pins, shift, pshift));
 };
 var timelines = function() {
 	CT.dom.className("mdtimeline").forEach(buildTimeline);
