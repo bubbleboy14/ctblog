@@ -3,7 +3,7 @@ from cantools.util import read
 from model import db, BasePost
 
 def tagprep(s, strips=None):
-	return s.replace("\n", " ").replace('"', "'").strip(strips)
+	return (s or "").replace("\n", " ").replace('"', "'").strip(strips)
 
 def striplinx(s):
 	while "](" in s:
