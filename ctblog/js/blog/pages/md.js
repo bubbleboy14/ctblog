@@ -70,7 +70,7 @@ var charts = function() {
 };
 var buildTimeline = function(n) {
 	var line, parts, start, shift, pshift, pin, bar, pins = [],
-		bars = [], lines = n.innerHTML.split("   ").slice(1);
+		bars = [], lines = n.innerHTML.replace(/   /g, "  ").split("  ").slice(1);
 	for (line of lines) {
 		parts = line.split(" ");
 		start = parts[0];
