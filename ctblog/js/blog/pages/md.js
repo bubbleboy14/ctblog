@@ -222,13 +222,17 @@ var h2fix = function(n) {
 	n.replaceWith(CT.dom.div(cont));
 };
 
+var nosho = function() {
+	CT.dom.setMain(CT.dom.div("can't find it!", "centered"));
+};
+
 CT.onload(function() {
 	CT.initCore();
 	mcfg.video && CT.parse.enableVideo();
 	var q = CT.info.query, h = q.n || location.hash.slice(1), c = q.c;
-	fetch("/md/" + h + ".md").then(d => d.text()).then(function(text) {
+	h ? fetch("/md/" + h + ".md").then(d => d.text()).then(function(text) {
 		if (text.startsWith("<b>404</b>"))
-			CT.dom.setMain(CT.dom.div("can't find it!", "centered"));
+			nosho();
 		else {
 			document.head.getElementsByTagName("title")[0].innerHTML = h;
 			blog.view.simple(h);
@@ -242,5 +246,5 @@ CT.onload(function() {
 		}
 		(mcfg.toc || mcfg.nav) && jumpers();
 		c && scroll2chap(c);
-	});
+	}) : nosho();
 });
