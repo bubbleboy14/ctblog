@@ -224,6 +224,11 @@ var h2fix = function(n) {
 
 var nosho = function() {
 	CT.dom.setMain(CT.dom.div("can't find it!", "centered"));
+	setjumps();
+};
+
+var setjumps = function() {
+	(mcfg.toc || mcfg.nav) && jumpers();
 };
 
 CT.onload(function() {
@@ -243,8 +248,8 @@ CT.onload(function() {
 			CT.dom.tag("h2").forEach(h2fix);
 			charts();
 			timelines();
+			setjumps();
 		}
-		(mcfg.toc || mcfg.nav) && jumpers();
 		c && scroll2chap(c);
 	}) : nosho();
 });
