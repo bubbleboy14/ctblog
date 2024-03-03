@@ -28,9 +28,9 @@ blog.core.util = {
 					CT.dom.div(poster.firstName + " " + poster.lastName, "small centered")
 				], null, "/user/profile.html#" + poster.key, "round block hoverglow"));
 				if (!p.commentary && mode != "vid") return;
-				var content = [
+				var cono = CT.dom.div(comments.map(blog.core.util.comment)), content = [
 					CT.dom.div("Comments", "bigger bold"),
-					comments.map(blog.core.util.comment)
+					cono
 				];
 				cfg.blog.mailto && content.unshift(CT.dom.link("email a friend", function() {
 					CT.modal.prompt({
@@ -56,7 +56,7 @@ blog.core.util = {
 										body: val
 									};
 									CT.net.post("/_blog", pdata, null, function() {
-										cnode.firstChild.firstChild.nextSibling.appendChild(blog.core.util.comment(pdata));
+										cono.appendChild(blog.core.util.comment(pdata));
 									});
 									return "clear";
 								}
