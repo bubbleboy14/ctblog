@@ -102,9 +102,10 @@ var timelines = function() {
 };
 
 var hlfix = function(atag) {
+	if (!atag.href.includes("#")) return;
 	atag.onclick = function() {
 		location = atag.href;
-		atag.href.includes("#") && location.reload();
+		location.reload();
 	}
 };
 
