@@ -13,6 +13,9 @@ def vchan():
 	channel = cgi_get("channel", required=False, shield=True)
 	return channel and "v/%s"%(channel,) or "v"
 
+def isvid(f):
+	return f.endswith("mp4") or f.endswith("mov")
+
 def response():
 	if config.memcache.db:
 		clearmem()
@@ -46,7 +49,7 @@ def response():
 	if action == "ranvid":
 		p = vchan()
 		for dn, dz, fz in os.walk(p):
-			vpath = "/%s/%s"%(p, random.choice(fz))
+			vpath = "/%s/%s"%(p, random.choice(list(filter(isvid, fz))))
 			log("ranvid: %s"%(vpath,))
 			succeed(vpath)
 	if action == "md":
