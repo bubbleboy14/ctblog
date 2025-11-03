@@ -1,4 +1,5 @@
-from cantools.web import respond, cgi_get, metize, text2image
+from cantools.web.util import metize, text2image
+from cantools.web import respond, cgi_get
 from cantools.util import read
 from model import db, BasePost
 
